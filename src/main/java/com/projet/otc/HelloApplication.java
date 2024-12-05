@@ -15,7 +15,9 @@ public class HelloApplication extends Application {
     public void start(Stage primaryStage) throws Exception {
         // Load FXML
         FXMLLoader loader = new FXMLLoader(getClass().getResource("test2.fxml"));
-        primaryStage.setScene(new Scene(loader.load()));
+        Scene scene = new Scene(loader.load());
+        //scene.getStylesheets().add(getClass().getResource("Styles/signStyles.css").toExternalForm());
+        primaryStage.setScene(scene);
         primaryStage.setTitle("Pharmacy Finder");
         primaryStage.show();
 

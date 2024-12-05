@@ -1,0 +1,86 @@
+#imagebg{
+    -fx-background-radius : 20px;
+    -fx-border-radius : 20px;
+    -fx-background-color :  #E8F5E9;
+    -fx-border-color : black;
+    -fx-border-width : 1px;
+
+
+}
+
+#bg2{
+    -fx-background-radius : 15px;
+    -fx-border-radius : 15px;
+    -fx-background-color :  white;
+        -fx-border-color : black;
+        -fx-border-width : 1px;
+
+}
+
+#signUpButton:hover{
+    -fx-background-color:#006766;
+    -fx-text-fill : white;
+    -fx-font-weight: 700;
+    -fx-border-color : #fffdf7;
+
+
+}
+
+#signUpButton{
+    -fx-background-radius : 7px;
+    -fx-border-radius : 7px;
+    -fx-background-color:#43A047;
+    -fx-font-size:18px;
+    -fx-font-family:Roboto;
+    -fx-border-color : black;
+    -fx-font-weight: 600;
+
+
+
+}
+
+#header .label, #noment{
+    -fx-font-size: 30px;
+    -fx-font-weight: 800;
+    -fx-font-family: Georgia;
+    -fx-text-fill : #006766;
+
+}
+#header .label{
+    -fx-text-fill : #fffdf7;
+
+}
+
+#header{
+    -fx-border-color : #fffdf7;
+    -fx-border-width : 0px;
+    -fx-background-color : #43A047;
+    -fx-background-radius : 5px;
+    -fx-border-radius : 5px;
+}
+
+#suptext{
+    -fx-text-fill : black;
+    -fx-font-weight: 500;
+    -fx-font-size : 15px  ;
+}
+
+#hlink{
+    -fx-text-fill : #9dc209;
+    -fx-font-weight: 500;
+    -fx-font-size : 15px  ;
+}
+
+.text-field{
+    -fx-border-width:1px;
+    -fx-border-color: #D6D6D6;
+    -fx-border-style: solid;
+
+}
+
+.text-field:focused{
+    -fx-border-width:1px;
+    -fx-border-color: #4CAF50;
+    -fx-border-style: solid;
+
+}
