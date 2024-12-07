@@ -1,15 +1,24 @@
 package com.projet.otc.controllers;
 
+import com.projet.otc.DataManagement.PharmacieDAO;
+import com.projet.otc.pharmacie.Medicament;
+import com.projet.otc.pharmacie.Pharmacie;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.concurrent.Worker;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.web.WebView;
 import netscape.javascript.JSObject;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PharmacyFinderController {
@@ -18,7 +27,22 @@ public class PharmacyFinderController {
     private ListView<String> pharmacyList;
 
     @FXML
-    private ListView<String> medicineList;
+    private TableView<Pharmacie> tPharma;
+
+    @FXML
+    private TableView<Medicament> tMedic;
+
+    @FXML
+    private TableColumn<Pharmacie, String> c_dist;
+
+    @FXML
+    private TableColumn<Medicament, String> c_med;
+
+    @FXML
+    private TableColumn<Pharmacie, String> c_pharma;
+
+    @FXML
+    private TableColumn<Medicament, String> c_prix;
 
     @FXML
     private WebView mapWebView;
@@ -30,19 +54,38 @@ public class PharmacyFinderController {
     private Button exitButton;
 
     @FXML
+    private Button b_table;
+
+    private List<Pharmacie> lphar = new ArrayList<>();
+
+    @FXML
     public void initialize() {
-        // Load the OpenStreetMap HTML in the WebView
+
+        c_pharma.setCellValueFactory(data->
+            new SimpleStringProperty(data.getValue().getName())
+        );
+
+        c_dist.setCellValueFactory(data->{
+            String script = String.format("calculerDistance(%f, %f);",data.getValue().getLat(),data.getValue().getLng());
+            return new SimpleStringProperty(String.valueOf(mapWebView.getEngine().executeScript(script)));
+        });
+
+
+
         loadMap();
+        exitButton.setOnAction(event -> {
 
-        // Populate example data
-        pharmacyList.getItems().addAll("Pharmacy 1", "Pharmacy 2", "Pharmacy 3");
+            lphar=markPharmaciesOnMap();
 
-        // Set actions
+        });
+
+        b_table.setOnMouseClicked(e->afficherListePharmaDisop(lphar));
+
         refreshButton.setOnAction(event -> {
             System.out.println("ok");
             loadMap();
         });
-        exitButton.setOnAction(event -> markPharmaciesOnMap());
+
     }
 
     private void loadMap() {
@@ -72,22 +115,35 @@ public class PharmacyFinderController {
                         }).addTo(map);
                         
                         navigator.geolocation.watchPosition(succes, error);
-                        let marker; // To store the current marker
-
+                        //*********Declarations
+                        let greenIcon = L.icon({
+                            iconUrl: 'https://files.catbox.moe/0gmm4h.png', 
+                            iconSize: [35, 41], // Width, Height
+                            iconAnchor: [12, 41], // Position relative to the point
+                            popupAnchor: [1, -34],
+                            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+                            shadowSize: [41, 41]
+                        });
+                        
+                        let marker; 
+                        let circle; 
+                        let markerGroup = L.layerGroup().addTo(map);
+                        const rayon = 300000;
                         function addNewMarker(lat, lon) {
                         if (marker) {
                             map.removeLayer(marker); 
                         }
                         marker = L.marker([lat, lon]).addTo(map).bindPopup("New Location").openPopup();
+                        addCircle(lat,lon,rayon);
+                        
                         }
                         
-                        
+                        //**************Set default position
                         map.on('contextmenu', function (e) {
                             let lat = e.latlng.lat;
                             let lon = e.latlng.lng;
-                            addNewMarker(lat, lon); // Add a new marker at the clicked location
-                
-
+                            addNewMarker(lat, lon); 
+                            markerGroup.clearLayers();
                         });
                         
                         function succes(pos){
@@ -95,6 +151,7 @@ public class PharmacyFinderController {
                             const lng = pos.coords.longitude;
                             const acc = pos.coords.accuracy;
                             marker=L.marker([lat, lng]).addTo(map).bindPopup("Extracted Position").openPopup();
+                            addCircle(lat, lng, rayon)
                         }
 
                         function error(err){
@@ -106,13 +163,42 @@ public class PharmacyFinderController {
                             }
                             console.log("erreur");
                             marker=L.marker([36.8065, 10.1815]).addTo(map).bindPopup("Default Location: Tunis").openPopup();
+                            addCircle(36.8065, 10.1815, rayon);
+                        }
+                        
+                        //**************************************Circle
+                        
+                        function addCircle(lat, lon, radius) {
+                        if (circle) {
+                            map.removeLayer(circle); // Remove the previous circle if it exists
+                        }
+                        circle = L.circle([lat, lon], {
+                            radius: radius,  
+                            color: 'blue',    
+                            fillColor: '#10f',
+                            fillOpacity: 0.1
+                            }).addTo(map);
                         }
 
-
+                        //********************Add marker
                         function addMarkerFromJava(lat, lon, name) {
                                         console.log("Adding marker at", lat, lon);
-                                        L.marker([lat, lon]).addTo(map).bindPopup(name).openPopup();
+                                        markerGroup.addLayer(L.marker([lat, lon], { icon: greenIcon }).bindPopup(name));
                         }
+                        
+                        function isCoordinateInsideCircle(lat, lon) {
+                            if (circle) {
+                                const distance = map.distance(circle.getLatLng(), L.latLng(lat, lon));
+                                return distance <= circle.getRadius(); 
+                            }
+                            return false;
+                        }
+                        
+                        function calculerDistance(lat,lng){
+                            let posPharmacie = L.latLng(lat,lng);
+                            return (posPharmacie.distanceTo(marker.getLatLng())/1000).toFixed(2);
+                        }
+                        
 
                     </script>
         </body>
@@ -127,18 +213,29 @@ public class PharmacyFinderController {
         });
     }
 
-    private void markPharmaciesOnMap() {
-        List<double[]> coordinates = List.of(
+    private List<Pharmacie> markPharmaciesOnMap() {
+        /*List<double[]> coordinates = List.of(
                 new double[]{36.8065, 10.1815},
-                new double[]{36.8165, 10.1915},                                     //get from db
+                new double[]{36.8165, 10.1915},
+                new double[]{36.9165, 10.1915},
+                new double[]{37.8165, 10.1715},
+                new double[]{36.8165, 10.2915},
                 new double[]{36.8265, 10.1925}
 
         );
-        String name = "Pharmacie";
+        String name = "Pharmacie";*/
 
-        for (double[] coord : coordinates) {
-            String script = String.format("addMarkerFromJava(%f, %f, '%s');", coord[0], coord[1], name);
-            mapWebView.getEngine().executeScript(script);
+        List<Pharmacie> Lpharma = PharmacieDAO.afficherPharmacie();
+        List<Pharmacie> LpharmaDispo = new ArrayList<>();
+
+        for (Pharmacie phar  : Lpharma) {
+            String script1 = String.format("isCoordinateInsideCircle(%f, %f);", phar.getLat(), phar.getLng());
+            boolean inside = (boolean) mapWebView.getEngine().executeScript(script1);
+            if(inside){
+                LpharmaDispo.add(new Pharmacie(phar.getLng(),phar.getLat(),phar.getName()));
+                String script = String.format("addMarkerFromJava(%f, %f, '%s');", phar.getLat(), phar.getLng(), phar.getName());
+                mapWebView.getEngine().executeScript(script);
+            }
         }
 
 
@@ -152,7 +249,14 @@ public class PharmacyFinderController {
             }
         });*/
 
-
+        return LpharmaDispo;
     }
+
+    private void afficherListePharmaDisop(List<Pharmacie> lphar){
+        ObservableList<Pharmacie> LpharObs=FXCollections.observableArrayList(lphar);
+        tPharma.setItems(LpharObs);
+    }
+
+
 
 }
