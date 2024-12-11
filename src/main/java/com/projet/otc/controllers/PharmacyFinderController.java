@@ -3,6 +3,8 @@ package com.projet.otc.controllers;
 import com.projet.otc.DataManagement.PharmacieDAO;
 import com.projet.otc.pharmacie.Medicament;
 import com.projet.otc.pharmacie.Pharmacie;
+import com.projet.otc.pharmacie.Stock;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -10,10 +12,9 @@ import javafx.concurrent.Worker;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.ImageView;
 import javafx.scene.web.WebView;
 import netscape.javascript.JSObject;
 
@@ -30,19 +31,19 @@ public class PharmacyFinderController {
     private TableView<Pharmacie> tPharma;
 
     @FXML
-    private TableView<Medicament> tMedic;
+    private TableView<Stock> tMedic;
 
     @FXML
     private TableColumn<Pharmacie, String> c_dist;
 
     @FXML
-    private TableColumn<Medicament, String> c_med;
+    private TableColumn<Stock, String> c_med;
 
     @FXML
     private TableColumn<Pharmacie, String> c_pharma;
 
     @FXML
-    private TableColumn<Medicament, String> c_prix;
+    private TableColumn<Stock, String> c_prix;
 
     @FXML
     private WebView mapWebView;
@@ -56,7 +57,28 @@ public class PharmacyFinderController {
     @FXML
     private Button b_table;
 
+    @FXML
+    private Button b_down;
+
+    @FXML
+    private Button b_up;
+
+    @FXML
+    private TableColumn<Stock, String> c_desc;
+
+    @FXML
+    private TableColumn<Stock, String> c_qte;
+
+    @FXML
+    private Label refresh;
+
+    @FXML
+    private Label rayonCirc;
+
     private List<Pharmacie> lphar = new ArrayList<>();
+
+    private int Radius=300000;
+    private final int Radius_init=300000;
 
     @FXML
     public void initialize() {
@@ -69,6 +91,14 @@ public class PharmacyFinderController {
             String script = String.format("calculerDistance(%f, %f);",data.getValue().getLat(),data.getValue().getLng());
             return new SimpleStringProperty(String.valueOf(mapWebView.getEngine().executeScript(script)));
         });
+
+        c_med.setCellValueFactory(new PropertyValueFactory<>("MedName"));
+
+        c_prix.setCellValueFactory(new PropertyValueFactory<>("prixMed"));
+
+        c_desc.setCellValueFactory(new PropertyValueFactory<>("MedDesc"));
+
+        c_qte.setCellValueFactory(new PropertyValueFactory<>("qte"));
 
 
 
@@ -85,6 +115,42 @@ public class PharmacyFinderController {
             System.out.println("ok");
             loadMap();
         });
+
+        Platform.runLater(() -> {
+            rayonCirc.setText(String.valueOf(Radius));
+
+            refresh.setOnMouseClicked(e->{loadMap() ;
+                Radius=Radius_init;
+                rayonCirc.setText(String.valueOf(Radius));
+
+            });
+
+
+        });
+
+        b_up.setOnMouseClicked(e->{
+            Radius+=3000000;
+            mapWebView.getEngine().executeScript(String.format("changeRadius(%d)",Radius));
+            rayonCirc.setText(String.valueOf(mapWebView.getEngine().executeScript("rayon")));
+
+            //loadMap();
+        });
+        b_down.setOnMouseClicked(e->{
+            Radius-=3000000;
+            mapWebView.getEngine().executeScript(String.format("changeRadius(%d)",Radius));
+            rayonCirc.setText(String.valueOf(mapWebView.getEngine().executeScript("rayon")));
+
+        });
+
+
+        tPharma.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                afficherTableauMedicament(newValue.getId());
+
+            }
+        });
+
+
 
     }
 
@@ -128,7 +194,7 @@ public class PharmacyFinderController {
                         let marker; 
                         let circle; 
                         let markerGroup = L.layerGroup().addTo(map);
-                        const rayon = 300000;
+                        var rayon = 300000;
                         function addNewMarker(lat, lon) {
                         if (marker) {
                             map.removeLayer(marker); 
@@ -199,6 +265,12 @@ public class PharmacyFinderController {
                             return (posPharmacie.distanceTo(marker.getLatLng())/1000).toFixed(2);
                         }
                         
+                        function changeRadius(newRay){
+                            rayon=newRay;
+                            circle.setRadius(rayon);
+                        }
+                        
+                        
 
                     </script>
         </body>
@@ -211,6 +283,7 @@ public class PharmacyFinderController {
         mapWebView.getEngine().setOnError(event -> {
             System.out.println("WebView Error: " + event.getMessage());
         });
+
     }
 
     private List<Pharmacie> markPharmaciesOnMap() {
@@ -232,7 +305,7 @@ public class PharmacyFinderController {
             String script1 = String.format("isCoordinateInsideCircle(%f, %f);", phar.getLat(), phar.getLng());
             boolean inside = (boolean) mapWebView.getEngine().executeScript(script1);
             if(inside){
-                LpharmaDispo.add(new Pharmacie(phar.getLng(),phar.getLat(),phar.getName()));
+                LpharmaDispo.add(new Pharmacie(phar.getId(),phar.getLng(),phar.getLat(),phar.getName()));
                 String script = String.format("addMarkerFromJava(%f, %f, '%s');", phar.getLat(), phar.getLng(), phar.getName());
                 mapWebView.getEngine().executeScript(script);
             }
@@ -255,6 +328,14 @@ public class PharmacyFinderController {
     private void afficherListePharmaDisop(List<Pharmacie> lphar){
         ObservableList<Pharmacie> LpharObs=FXCollections.observableArrayList(lphar);
         tPharma.setItems(LpharObs);
+    }
+
+    private void afficherTableauMedicament(int id){
+        List<Stock> Lmed = PharmacieDAO.afficherStockPharmacie(id);
+        ObservableList<Stock> ObsLmed = FXCollections.observableArrayList(Lmed);
+
+        tMedic.setItems(ObsLmed);
+
     }
 
 

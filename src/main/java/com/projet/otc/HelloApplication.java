@@ -14,7 +14,7 @@ public class HelloApplication extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         // Load FXML
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("test2.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("TEST3.fxml"));
         Scene scene = new Scene(loader.load());
         scene.getStylesheets().add(getClass().getResource("Styles/style1.css").toExternalForm());
         primaryStage.setScene(scene);

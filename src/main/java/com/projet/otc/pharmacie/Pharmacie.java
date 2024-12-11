@@ -7,7 +7,8 @@ public class Pharmacie {
     private double lng;
 
 
-    public Pharmacie(double lng, double lat, String name) {
+    public Pharmacie(int id,double lng, double lat, String name) {
+        this.id=id;
         this.lng = lng;
         this.lat = lat;
         this.name = name;

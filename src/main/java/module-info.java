@@ -7,6 +7,7 @@ module com.projet.otc {
 
     opens com.projet.otc to javafx.fxml;
     opens com.projet.otc.controllers to javafx.fxml;
+    opens com.projet.otc.pharmacie to javafx.base;
     exports com.projet.otc;
     exports com.projet.otc.controllers;
 }

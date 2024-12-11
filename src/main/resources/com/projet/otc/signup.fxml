@@ -33,13 +33,13 @@
                   <StackPane>
                      <children>
                         <Pane fx:id="imagebg" prefHeight="200.0" prefWidth="200.0" />
-                        <ImageView fitHeight="354.0" fitWidth="373.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="354.0" fitWidth="354.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" translateY="-15.0">
                            <image>
-                              <Image url="@images/pngtree-yoga-health-logo-png-image_6161666.png" />
+                              <Image url="@images/logo.png" />
                            </image>
                         </ImageView>
-                        <Label fx:id="noment" alignment="CENTER" prefHeight="36.0" prefWidth="231.0" text="Nom entreprise" translateY="140.0" />
-                        <Label alignment="CENTER" prefHeight="17.0" prefWidth="214.0" style="-fx-text-fill: #43A047;" text="Your health,Our priority" translateX="-10.0" translateY="160.0" />
+                        <Label fx:id="noment" alignment="CENTER" prefHeight="36.0" prefWidth="231.0" text="QuickMeds" translateY="145.0" />
+                        <Label alignment="CENTER" prefHeight="17.0" prefWidth="214.0" style="-fx-text-fill: #43A047;" text="Your health,Our priority" translateY="165.0" />
                      </children>
                      <padding>
                         <Insets bottom="10.0" left="10.0" top="10.0" />
@@ -47,25 +47,45 @@
                   </StackPane>
             
                     <VBox prefHeight="354.0" prefWidth="389.0" spacing="10.0" style="-fx-padding: 20;">
-                        <Label style="-fx-font-size: 14px; -fx-font-weight: bold;" text="Username" translateY="40.0">
+                        <Label style="-fx-font-size: 14px; -fx-font-weight: bold;" text=" Username" translateY="40.0">
                         <padding>
-                           <Insets left="7.0" />
-                        </padding></Label>
+                           <Insets left="10.0" />
+                        </padding>
+                        <graphic>
+                           <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                              <image>
+                                 <Image url="@images/loginIcon.png" />
+                              </image>
+                           </ImageView>
+                        </graphic></Label>
                         <TextField fx:id="usernameField" prefHeight="35.0" translateY="40.0" />
             
-                        <Label style="-fx-font-size: 14px; -fx-font-weight: bold;" text="Password" translateY="40.0">
+                        <Label style="-fx-font-size: 14px; -fx-font-weight: bold;" text=" Password" translateY="40.0">
                         <padding>
-                           <Insets left="7.0" />
-                        </padding></Label>
+                           <Insets left="10.0" />
+                        </padding>
+                        <graphic>
+                           <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                              <image>
+                                 <Image url="@images/images-removebg-preview.png" />
+                              </image>
+                           </ImageView>
+                        </graphic></Label>
                         <PasswordField fx:id="passwordField" prefHeight="35.0" translateY="40.0" />
             
-                        <Label style="-fx-font-size: 14px; -fx-font-weight: bold;" text="Confirm Password" translateY="40.0">
+                        <Label style="-fx-font-size: 14px; -fx-font-weight: bold;" text=" Confirm Password" translateY="40.0">
                         <padding>
-                           <Insets left="7.0" />
-                        </padding></Label>
+                           <Insets left="10.0" />
+                        </padding>
+                        <graphic>
+                           <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                              <image>
+                                 <Image url="@images/images-removebg-preview.png" />
+                              </image>
+                           </ImageView>
+                        </graphic></Label>
                         <PasswordField fx:id="confirmPasswordfield" prefHeight="35.0" translateY="40.0" />
                     </VBox>
-                  <Label text="Label" />
                </children>
             </HBox>
          </children>

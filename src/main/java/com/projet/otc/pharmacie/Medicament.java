@@ -12,6 +12,12 @@ public class Medicament {
         this.desc = desc;
     }
 
+    public Medicament(int id,String name, String desc){
+        this.id=id;
+        this.name = name;
+        this.desc = desc;
+    }
+
 
 
     public int getId() {
