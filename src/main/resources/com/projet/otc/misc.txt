@@ -11,3 +11,151 @@ green feta7 and dead #b7db87
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+package com.projet.otc.controllers;
+
+import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import javafx.stage.Stage;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class MedicineController1 extends Application {
+
+    private List<Medicine> medicines = new ArrayList<>(); // Simulated database of medicines
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+
+    @Override
+    public void start(Stage primaryStage) {
+        primaryStage.setTitle("Pharmacy App - Medications");
+
+        // Colors used in the design
+        String primaryGreen = "#43A047";
+        String lightBackground = "#fffdf7";
+        String accentGreen = "#27ae60";
+
+        // Top Search Bar
+        TextField searchField = new TextField();
+        searchField.setPromptText("Search for a medicine...");
+        searchField.setStyle("-fx-background-color: " + lightBackground + "; -fx-border-color: " + primaryGreen + "; -fx-border-radius: 5px; -fx-padding: 10px;");
+        searchField.setPrefHeight(40);
+
+        // Medicine Cards Layout
+        FlowPane medicineContainer = new FlowPane();
+        medicineContainer.setHgap(15);
+        medicineContainer.setVgap(15);
+        medicineContainer.setPadding(new Insets(15));
+        medicineContainer.setStyle("-fx-background-color: " + lightBackground + ";");
+
+        // Create Scroll Pane to make it scrollable
+        ScrollPane scrollPane = new ScrollPane(medicineContainer);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setStyle("-fx-background-color: " + lightBackground + "; -fx-border-color: " + primaryGreen + ";");
+
+        // Populate the initial list of 8 medicine cards
+        generateDummyMedicines();
+        displayMedicines(medicineContainer);
+
+        // Event Listener for Search Field
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            List<Medicine> filteredList = medicines.stream()
+                    .filter(med -> med.getName().toLowerCase().contains(newValue.toLowerCase()))
+                    .toList();
+            displayMedicines(medicineContainer, filteredList);
+        });
+
+        // Layout for the app
+        BorderPane root = new BorderPane();
+        HBox topContainer = new HBox(searchField);
+        topContainer.setPadding(new Insets(15));
+        topContainer.setStyle("-fx-background-color: " + primaryGreen + ";");
+        root.setTop(topContainer);
+        root.setCenter(scrollPane);
+
+        Scene scene = new Scene(root, 900, 600);
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
+    private void generateDummyMedicines() {
+        // Dummy medicine data to simulate database entries
+        medicines.add(new Medicine("Paracetamol", 5.50, "https://via.placeholder.com/100"));
+        medicines.add(new Medicine("Ibuprofen", 7.99, "https://via.placeholder.com/100"));
+        medicines.add(new Medicine("Aspirin", 3.75, "https://via.placeholder.com/100"));
+        medicines.add(new Medicine("Vitamin C", 12.40, "https://via.placeholder.com/100"));
+        medicines.add(new Medicine("Cough Syrup", 8.99, "https://via.placeholder.com/100"));
+        medicines.add(new Medicine("Antibiotic", 15.50, "https://via.placeholder.com/100"));
+        medicines.add(new Medicine("Nasal Spray", 6.75, "https://via.placeholder.com/100"));
+        medicines.add(new Medicine("Eye Drops", 4.80, "https://via.placeholder.com/100"));
+    }
+
+    private void displayMedicines(FlowPane container) {
+        displayMedicines(container, medicines);
+    }
+
+    private void displayMedicines(FlowPane container, List<Medicine> medicinesToDisplay) {
+        container.getChildren().clear(); // Clear previous items
+
+        for (Medicine med : medicinesToDisplay) {
+            VBox card = createMedicineCard(med);
+            container.getChildren().add(card);
+        }
+    }
+
+    private VBox createMedicineCard(Medicine medicine) {
+        VBox card = new VBox(10);
+        card.setPadding(new Insets(10));
+        card.setPrefSize(150, 220);
+        card.setAlignment(Pos.TOP_CENTER);
+        card.setStyle("-fx-background-color: #fff; -fx-border-color: #27ae60; -fx-border-radius: 10px; -fx-background-radius: 10px;");
+
+        ImageView imageView = new ImageView(new Image(medicine.getImageUrl()));
+        imageView.setFitWidth(100);
+        imageView.setFitHeight(100);
+
+        Text nameText = new Text(medicine.getName());
+        nameText.setFont(Font.font("Arial", FontWeight.BOLD, 14));
+        nameText.setFill(Color.web("#2d3436"));
+
+        Text priceText = new Text("$" + String.format("%.2f", medicine.getPrice()));
+        priceText.setFont(Font.font("Arial", 12));
+        priceText.setFill(Color.web("#27ae60"));
+
+        card.getChildren().addAll(imageView, nameText, priceText);
+        return card;
+    }
+
+
+}
+
+
+
+

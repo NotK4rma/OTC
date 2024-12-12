@@ -4,6 +4,8 @@ import com.projet.otc.DataManagement.PharmacieDAO;
 import com.projet.otc.pharmacie.Medicament;
 import com.projet.otc.pharmacie.Pharmacie;
 import com.projet.otc.pharmacie.Stock;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -16,6 +18,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.web.WebView;
+import javafx.util.Duration;
 import netscape.javascript.JSObject;
 
 
@@ -83,6 +86,10 @@ public class PharmacyFinderController {
     private int Radius=300000;
     private final int Radius_init=300000;
 
+    private Timeline timeline;
+    boolean changed=false;
+
+
     @FXML
     public void initialize() {
 
@@ -122,6 +129,19 @@ public class PharmacyFinderController {
 
 
 
+        timeline = new Timeline(new KeyFrame(Duration.millis(3000), event -> {
+            System.out.println("Checking if position changed...");
+            changed=checkMarkerPositionChange();
+            System.out.println(changed);
+            if (changed==true){
+                tPharma.getItems().clear();
+                tMedic.getItems().clear();
+                placeMarkersAndShowPharmacies();
+            }
+        }));
+        timeline.setCycleCount(Timeline.INDEFINITE); // Repeat forever
+        timeline.play();
+
 
 
 
@@ -160,7 +180,8 @@ public class PharmacyFinderController {
 
             rayonCirc.setText(String.valueOf(Radius));
 
-            refresh.setOnMouseClicked(e->{//loadMap() ;
+            refresh.setOnMouseClicked(e->{
+                System.out.println("hhhh");
                 loadMapAndExecuteChainedTasks();
                 Radius=Radius_init;
                 rayonCirc.setText(String.valueOf(Radius));
@@ -195,6 +216,8 @@ public class PharmacyFinderController {
             }
         });
 
+        exitButton.setOnMouseClicked(e->System.exit(0));
+
 
 
     }
@@ -227,6 +250,7 @@ public class PharmacyFinderController {
                         
                         navigator.geolocation.watchPosition(succes, error);
                         //*********Declarations
+                        
                         let greenIcon = L.icon({
                             iconUrl: 'https://files.catbox.moe/0gmm4h.png', 
                             iconSize: [35, 41], // Width, Height
@@ -240,6 +264,9 @@ public class PharmacyFinderController {
                         let circle; 
                         let markerGroup = L.layerGroup().addTo(map);
                         var rayon = 300000;
+                        let coords_markerInit;
+                        
+                        
                         function addNewMarker(lat, lon) {
                         if (marker) {
                             map.removeLayer(marker); 
@@ -249,7 +276,7 @@ public class PharmacyFinderController {
                         
                         }
                         
-                        //**************Set default position
+                       
                         map.on('contextmenu', function (e) {
                             let lat = e.latlng.lat;
                             let lon = e.latlng.lng;
@@ -263,6 +290,8 @@ public class PharmacyFinderController {
                             const acc = pos.coords.accuracy;
                             marker=L.marker([lat, lng]).addTo(map).bindPopup("Extracted Position").openPopup();
                             addCircle(lat, lng, rayon)
+                            coords_markerInit = marker.getLatLng();
+                            
                         }
 
                         function error(err){
@@ -275,7 +304,10 @@ public class PharmacyFinderController {
                             console.log("erreur");
                             marker=L.marker([36.8065, 10.1815]).addTo(map).bindPopup("Default Location: Tunis").openPopup();
                             addCircle(36.8065, 10.1815, rayon);
+                            coords_markerInit = marker.getLatLng();
+                            
                         }
+                        
                         
                         //**************************************Circle
                         
@@ -316,6 +348,17 @@ public class PharmacyFinderController {
                             markerGroup.clearLayers();
                         }
                         
+                        function MarkerChanged(){
+                            if(marker.getLatLng().lat != coords_markerInit.lat || marker.getLatLng().lng != coords_markerInit.lng){
+                                coords_markerInit=marker.getLatLng();
+                                return true;
+                             
+                            }
+                            else{
+                                return false;
+                            }
+                        }
+                        
                         
 
                     </script>
@@ -324,7 +367,6 @@ public class PharmacyFinderController {
     """;
 
 
-       // System.out.println("Map HTML content: " + mapHtml);
         mapWebView.getEngine().loadContent(mapHtml);
         System.out.println("laoded");
         mapWebView.getEngine().setOnError(event -> {
@@ -334,16 +376,6 @@ public class PharmacyFinderController {
     }
 
     private List<Pharmacie> markPharmaciesOnMap() {
-        /*List<double[]> coordinates = List.of(
-                new double[]{36.8065, 10.1815},
-                new double[]{36.8165, 10.1915},
-                new double[]{36.9165, 10.1915},
-                new double[]{37.8165, 10.1715},
-                new double[]{36.8165, 10.2915},
-                new double[]{36.8265, 10.1925}
-
-        );
-        String name = "Pharmacie";*/
 
         List<Pharmacie> Lpharma = PharmacieDAO.afficherPharmacie();
         List<Pharmacie> LpharmaDispo = new ArrayList<>();
@@ -359,15 +391,6 @@ public class PharmacyFinderController {
         }
 
 
-        /*mapWebView.getEngine().getLoadWorker().stateProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue == Worker.State.SUCCEEDED) {
-                JSObject window = (JSObject) mapWebView.getEngine().executeScript("window");
-                window.setMember("javaConnector", new JavaConnector());
-
-                // Add your marker-adding logic here, for example:
-
-            }
-        });*/
         System.out.println("finished marking");
 
         return LpharmaDispo;
@@ -396,18 +419,15 @@ public class PharmacyFinderController {
 
             loadMap();
 
-            // Wait for the WebView to finish loading
             mapWebView.getEngine().getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> {
                 if (newState == javafx.concurrent.Worker.State.SUCCEEDED) {
                     System.out.println("WebView finished loading!");
 
-                    // Step 2: Call markPharmaciesOnMap() after WebView is ready
                     Platform.runLater(() -> {
                         System.out.println("Running markPharmaciesOnMap()");
 
                         lphar = markPharmaciesOnMap();
 
-                        // Step 3: Call afficherListePharmaDisop(lphar) after markPharmaciesOnMap() is done
                         Platform.runLater(() -> {
                             System.out.println("Running afficherListePharmaDisop()");
                             afficherListePharmaDisop(lphar);
@@ -419,24 +439,23 @@ public class PharmacyFinderController {
     }
 
     private void placeMarkersAndShowPharmacies(){
-        mapWebView.getEngine().getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> {
-            if (newState == javafx.concurrent.Worker.State.SUCCEEDED) {
-                System.out.println("WebView finished loading!");
 
-                // Step 2: Call markPharmaciesOnMap() after WebView is ready
+
                 Platform.runLater(() -> {
                     System.out.println("Running markPharmaciesOnMap()");
 
                     lphar = markPharmaciesOnMap();
 
-                    // Step 3: Call afficherListePharmaDisop(lphar) after markPharmaciesOnMap() is done
                     Platform.runLater(() -> {
                         System.out.println("Running afficherListePharmaDisop()");
                         afficherListePharmaDisop(lphar);
                     });
                 });
-            }
-        });
+
+    }
+
+    private boolean checkMarkerPositionChange(){
+        return (boolean)mapWebView.getEngine().executeScript("MarkerChanged()");
 
     }
 
