@@ -27,7 +27,6 @@ public class PharmacieDAO {
                 );
 
                 Lphar.add(pha);
-                System.out.println("ajout +1");
             }
 
 
@@ -35,6 +34,7 @@ public class PharmacieDAO {
             e.printStackTrace();
             System.out.println("oops");
         }
+        System.out.println("database succes");
         return Lphar;
 
     }

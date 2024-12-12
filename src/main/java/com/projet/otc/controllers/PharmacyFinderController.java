@@ -21,6 +21,9 @@ import netscape.javascript.JSObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class PharmacyFinderController {
 
@@ -102,7 +105,44 @@ public class PharmacyFinderController {
 
 
 
-        loadMap();
+
+
+
+
+
+        loadMapAndExecuteChainedTasks();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        /*loadMap();
+
         exitButton.setOnAction(event -> {
 
             lphar=markPharmaciesOnMap();
@@ -113,15 +153,19 @@ public class PharmacyFinderController {
 
         refreshButton.setOnAction(event -> {
             System.out.println("ok");
-            loadMap();
-        });
+
+        });*/
 
         Platform.runLater(() -> {
+
             rayonCirc.setText(String.valueOf(Radius));
 
-            refresh.setOnMouseClicked(e->{loadMap() ;
+            refresh.setOnMouseClicked(e->{//loadMap() ;
+                loadMapAndExecuteChainedTasks();
                 Radius=Radius_init;
                 rayonCirc.setText(String.valueOf(Radius));
+                tPharma.getItems().clear();
+                tMedic.getItems().clear();
 
             });
 
@@ -132,13 +176,14 @@ public class PharmacyFinderController {
             Radius+=3000000;
             mapWebView.getEngine().executeScript(String.format("changeRadius(%d)",Radius));
             rayonCirc.setText(String.valueOf(mapWebView.getEngine().executeScript("rayon")));
+            placeMarkersAndShowPharmacies();
 
-            //loadMap();
         });
         b_down.setOnMouseClicked(e->{
             Radius-=3000000;
             mapWebView.getEngine().executeScript(String.format("changeRadius(%d)",Radius));
             rayonCirc.setText(String.valueOf(mapWebView.getEngine().executeScript("rayon")));
+            placeMarkersAndShowPharmacies();
 
         });
 
@@ -268,6 +313,7 @@ public class PharmacyFinderController {
                         function changeRadius(newRay){
                             rayon=newRay;
                             circle.setRadius(rayon);
+                            markerGroup.clearLayers();
                         }
                         
                         
@@ -280,6 +326,7 @@ public class PharmacyFinderController {
 
        // System.out.println("Map HTML content: " + mapHtml);
         mapWebView.getEngine().loadContent(mapHtml);
+        System.out.println("laoded");
         mapWebView.getEngine().setOnError(event -> {
             System.out.println("WebView Error: " + event.getMessage());
         });
@@ -321,12 +368,15 @@ public class PharmacyFinderController {
 
             }
         });*/
+        System.out.println("finished marking");
 
         return LpharmaDispo;
     }
 
     private void afficherListePharmaDisop(List<Pharmacie> lphar){
         ObservableList<Pharmacie> LpharObs=FXCollections.observableArrayList(lphar);
+        System.out.println("affihcer dans table");
+
         tPharma.setItems(LpharObs);
     }
 
@@ -335,6 +385,58 @@ public class PharmacyFinderController {
         ObservableList<Stock> ObsLmed = FXCollections.observableArrayList(Lmed);
 
         tMedic.setItems(ObsLmed);
+
+    }
+
+
+
+    private void loadMapAndExecuteChainedTasks() {
+        Platform.runLater(() -> {
+            System.out.println("Running loadMap()");
+
+            loadMap();
+
+            // Wait for the WebView to finish loading
+            mapWebView.getEngine().getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> {
+                if (newState == javafx.concurrent.Worker.State.SUCCEEDED) {
+                    System.out.println("WebView finished loading!");
+
+                    // Step 2: Call markPharmaciesOnMap() after WebView is ready
+                    Platform.runLater(() -> {
+                        System.out.println("Running markPharmaciesOnMap()");
+
+                        lphar = markPharmaciesOnMap();
+
+                        // Step 3: Call afficherListePharmaDisop(lphar) after markPharmaciesOnMap() is done
+                        Platform.runLater(() -> {
+                            System.out.println("Running afficherListePharmaDisop()");
+                            afficherListePharmaDisop(lphar);
+                        });
+                    });
+                }
+            });
+        });
+    }
+
+    private void placeMarkersAndShowPharmacies(){
+        mapWebView.getEngine().getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> {
+            if (newState == javafx.concurrent.Worker.State.SUCCEEDED) {
+                System.out.println("WebView finished loading!");
+
+                // Step 2: Call markPharmaciesOnMap() after WebView is ready
+                Platform.runLater(() -> {
+                    System.out.println("Running markPharmaciesOnMap()");
+
+                    lphar = markPharmaciesOnMap();
+
+                    // Step 3: Call afficherListePharmaDisop(lphar) after markPharmaciesOnMap() is done
+                    Platform.runLater(() -> {
+                        System.out.println("Running afficherListePharmaDisop()");
+                        afficherListePharmaDisop(lphar);
+                    });
+                });
+            }
+        });
 
     }
 
