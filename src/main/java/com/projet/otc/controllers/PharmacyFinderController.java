@@ -1,6 +1,7 @@
 package com.projet.otc.controllers;
 
 import com.projet.otc.DataManagement.PharmacieDAO;
+import com.projet.otc.MiscTools.SceneMethod;
 import com.projet.otc.pharmacie.Medicament;
 import com.projet.otc.pharmacie.Pharmacie;
 import com.projet.otc.pharmacie.Stock;
@@ -17,11 +18,14 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.web.WebView;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import netscape.javascript.JSObject;
 
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -81,13 +85,38 @@ public class PharmacyFinderController {
     @FXML
     private Label rayonCirc;
 
+    @FXML
+    private AnchorPane hide;
+
+    @FXML
+    private AnchorPane slider;
+
+    @FXML
+    private ImageView menuclose;
+
+    @FXML
+    private ImageView menuopen;
+
+    @FXML
+    private Button b_cart;
+
+    @FXML
+    private Button b_logout;
+
+    @FXML
+    private Button b_meds;
+
     private List<Pharmacie> lphar = new ArrayList<>();
 
     private int Radius=300000;
     private final int Radius_init=300000;
 
-    private Timeline timeline;
-    boolean changed=false;
+    private static Timeline timeline;
+    private boolean changed=false;
+    private int durationForCheckPos=100;
+    private SceneMethod editor = new SceneMethod();
+
+
 
 
     @FXML
@@ -111,8 +140,57 @@ public class PharmacyFinderController {
         c_qte.setCellValueFactory(new PropertyValueFactory<>("qte"));
 
 
+        menuopen.setOnMouseClicked(e-> SceneMethod.translationOpen(slider,hide,menuopen,menuclose));
+        menuclose.setOnMouseClicked(e-> SceneMethod.translationClose(slider,hide,menuopen,menuclose));
+
+        hide.setOnDragDetected(e-> SceneMethod.translationClose(slider,hide,menuopen,menuclose));
+
+        b_logout.setOnMouseEntered(e->{
+            SceneMethod.hoverInAnimation(b_logout);
+            SceneMethod.addHoverShadowEffect(b_logout);
+
+        });
+
+        b_cart.setOnMouseEntered(e->{
+            SceneMethod.hoverInAnimation(b_cart);
+            SceneMethod.addHoverShadowEffect(b_cart);
+
+        });
 
 
+        b_meds.setOnMouseEntered(e->{
+            SceneMethod.hoverInAnimation(b_meds);
+            SceneMethod.addHoverShadowEffect(b_meds);
+
+        });
+
+        b_logout.setOnMouseExited(e->SceneMethod.hoverOutAnimation(b_logout));
+        b_meds.setOnMouseExited(e->SceneMethod.hoverOutAnimation(b_meds));
+        b_cart.setOnMouseExited(e->SceneMethod.hoverOutAnimation(b_cart));
+
+        b_logout.setOnMouseClicked(e->{
+            b_logout.setStyle("-fx-border-color : white white white white ; -fx-border-size : 1px; -fx-text-fill : #EDF2F7; -fx-font-size : 18px; -fx-font-family: Franklin Gothic Demi; -fx-font-weight: 900; -fx-border-radius: 0; -fx-background-radius: 0; -fx-background-color: #1B7A46; -fx-font-size: 14px;-fx-border-radius: 5; -fx-background-radius: 5; -fx-border-color : white ;");
+            SceneMethod.SelectAnimation(b_logout);
+
+        });
+
+        b_cart.setOnMouseClicked(e->{
+            b_cart.setStyle("-fx-border-color : white white white white ; -fx-border-size : 1px; -fx-text-fill : #EDF2F7; -fx-font-size : 18px; -fx-font-family: Franklin Gothic Demi; -fx-font-weight: 900; -fx-border-radius: 0; -fx-background-radius: 0; -fx-background-color: #1B7A46; -fx-font-size: 14px;");
+            SceneMethod.SelectAnimation(b_cart);
+        });
+
+
+        b_meds.setOnMouseClicked(e->{
+            b_meds.setStyle("-fx-border-color : white white white white ; -fx-border-size : 1px; -fx-text-fill : #EDF2F7; -fx-font-size : 18px; -fx-font-family: Franklin Gothic Demi; -fx-font-weight: 900; -fx-border-radius: 0; -fx-background-radius: 0; -fx-background-color: #1B7A46; -fx-font-size: 14px;");
+            SceneMethod.SelectAnimation(b_meds);
+            try {
+                System.out.println(getClass().getResource("../Styles/style1.cssl"));
+                editor.switchScene((Stage)b_meds.getScene().getWindow(),"/com/projet/otc/testmeds.fxml","/com/projet/otc/Styles/style1.css");
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+            timeline.pause();
+        });
 
 
 
@@ -127,20 +205,24 @@ public class PharmacyFinderController {
 
 
 
-
-
-        timeline = new Timeline(new KeyFrame(Duration.millis(3000), event -> {
-            System.out.println("Checking if position changed...");
-            changed=checkMarkerPositionChange();
-            System.out.println(changed);
-            if (changed==true){
-                tPharma.getItems().clear();
-                tMedic.getItems().clear();
-                placeMarkersAndShowPharmacies();
-            }
+        Timeline timelineFirstIteration = new Timeline(new KeyFrame(Duration.seconds(3),e->{
+            timeline = new Timeline(new KeyFrame(Duration.millis(durationForCheckPos), event -> {
+                System.out.println("Checking if position changed...");
+                changed=checkMarkerPositionChange();
+                System.out.println(changed);
+                if (changed==true){
+                    tPharma.getItems().clear();
+                    tMedic.getItems().clear();
+                    placeMarkersAndShowPharmacies();
+                }
+            }));
+            timeline.setCycleCount(Timeline.INDEFINITE);
+            timeline.play();
         }));
-        timeline.setCycleCount(Timeline.INDEFINITE); // Repeat forever
-        timeline.play();
+        timelineFirstIteration.setCycleCount(1);
+        timelineFirstIteration.play();
+
+
 
 
 
@@ -212,11 +294,13 @@ public class PharmacyFinderController {
         tPharma.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 afficherTableauMedicament(newValue.getId());
+                mapWebView.getEngine().executeScript(String.format("addRedMarkerSelectedPharmacy(%f,%f)", newValue.getLat(), newValue.getLng()));
 
             }
         });
 
         exitButton.setOnMouseClicked(e->System.exit(0));
+
 
 
 
@@ -260,11 +344,22 @@ public class PharmacyFinderController {
                             shadowSize: [41, 41]
                         });
                         
+                        let redIcon = L.icon({
+                            iconUrl: 'https://files.catbox.moe/8hi4pg.png', 
+                            iconSize: [35, 41], // Width, Height
+                            iconAnchor: [12, 41], // Position relative to the point
+                            popupAnchor: [1, -34],
+                            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+                            shadowSize: [41, 41]
+                        });
+                        
                         let marker; 
                         let circle; 
                         let markerGroup = L.layerGroup().addTo(map);
                         var rayon = 300000;
                         let coords_markerInit;
+                        let name_lastPharm;
+                        let selectedPharmMarker;  
                         
                         
                         function addNewMarker(lat, lon) {
@@ -329,6 +424,30 @@ public class PharmacyFinderController {
                                         markerGroup.addLayer(L.marker([lat, lon], { icon: greenIcon }).bindPopup(name));
                         }
                         
+                        function addRedMarkerSelectedPharmacy(lat,lng,name){
+                            if(selectedPharmMarker){
+                                addMarkerFromJava(selectedPharmMarker.getLatLng().lat, selectedPharmMarker.getLatLng().lng, name_lastPharm);
+                                selectedPharmMarker.remove();
+                            }
+                            name_lastPharm=name;
+                            selectedPharmMarker = L.marker([lat, lng], { icon: redIcon }).bindPopup("Here").addTo(map);
+                            removeMarkerByCoordinatesFromLayer(markerGroup,lat,lng);
+
+                        }
+                        
+                        function removeMarkerByCoordinatesFromLayer(layerGroup, lat, lng) {
+                            layerGroup.eachLayer(function (layer) {
+                                if (layer.getLatLng) { // Ensure the layer is a marker or has LatLng
+                                                const markerLatLng = layer.getLatLng();
+                                    if (markerLatLng.lat === lat && markerLatLng.lng === lng) {
+                                         layerGroup.removeLayer(layer); // Remove the marker
+                                         console.log("Marker removed at:", lat, lng);
+                                    }
+                                }
+                            });
+                        }
+                
+                        
                         function isCoordinateInsideCircle(lat, lon) {
                             if (circle) {
                                 const distance = map.distance(circle.getLatLng(), L.latLng(lat, lon));
@@ -346,6 +465,11 @@ public class PharmacyFinderController {
                             rayon=newRay;
                             circle.setRadius(rayon);
                             markerGroup.clearLayers();
+                            if(selectedPharmMarker){
+                                if(!(isCoordinateInsideCircle(selectedPharmMarker.getLatLng().lat, selectedPharmMarker.getLatLng().lng))){
+                                    selectedPharmMarker.remove();
+                                }
+                            }
                         }
                         
                         function MarkerChanged(){
@@ -358,6 +482,8 @@ public class PharmacyFinderController {
                                 return false;
                             }
                         }
+                        
+
                         
                         
 
@@ -457,6 +583,10 @@ public class PharmacyFinderController {
     private boolean checkMarkerPositionChange(){
         return (boolean)mapWebView.getEngine().executeScript("MarkerChanged()");
 
+    }
+
+    public static void resumeTimeline(){
+        timeline.play();
     }
 
 

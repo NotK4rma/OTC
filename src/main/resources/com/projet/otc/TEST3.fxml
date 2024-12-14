@@ -18,8 +18,15 @@
 <AnchorPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projet.otc.controllers.PharmacyFinderController">
     <VBox spacing="10" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
         <!-- Top Bar -->
-        <HBox fx:id="header" alignment="CENTER_LEFT" spacing="10">
-            <Label style="-fx-font-size: 18px; -fx-text-fill: #ecf0f1;" text="Pharmacy Finder" />
+        <HBox fx:id="header" alignment="CENTER" spacing="10" style="-fx-background-color: green;">
+            <Label style="-fx-font-size: 18px; -fx-text-fill: #ecf0f1;" text=" Pharmacy Finder">
+            <graphic>
+               <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                  <image>
+                     <Image url="@images/pharmaIcon.png" />
+                  </image>
+               </ImageView>
+            </graphic></Label>
         </HBox>
 
         <!-- Content Section -->
@@ -47,7 +54,7 @@
                         <TableColumn fx:id="c_prix" minWidth="200.0" prefWidth="200.0" text="Prix (Dt)" />
                         <TableColumn fx:id="c_desc" minWidth="350.0" prefWidth="350.0" text="Description" />
                         <TableColumn fx:id="c_qte" minWidth="200.0" prefWidth="200.0" text="Quantity" />
-                  <TableColumn fx:id="c_qte1" minWidth="2000.0" prefWidth="2000.0" text="Quantity" />
+                  <TableColumn fx:id="c_qte1" minWidth="2000.0" prefWidth="2000.0" />
                     </columns>
                 </TableView>
                 <padding>
@@ -123,11 +130,99 @@
         </SplitPane>
 
         <!-- Footer -->
-        <HBox fx:id="footer" alignment="CENTER" spacing="10">
+        <HBox fx:id="footer" alignment="CENTER" spacing="10" style="-fx-background-color: green;">
             <Button fx:id="exitButton" style="-fx-background-color: #e74c3c; -fx-text-fill: white;" text="Exit" HBox.hgrow="NEVER">
                 <cursor>
                     <Cursor fx:constant="HAND" />
                 </cursor></Button>
         </HBox>
     </VBox>
+   <AnchorPane fx:id="hide" prefHeight="200.0" prefWidth="200.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="58.0" />
+   <AnchorPane fx:id="slider" prefHeight="200.0" prefWidth="280.0" style="-fx-background-color: #006766;" translateX="-282.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="58.0">
+      <children>
+         <VBox layoutY="23.0" spacing="100.0">
+            <children>
+               <Pane prefHeight="216.0" prefWidth="226.0" translateX="10.0" VBox.vgrow="ALWAYS">
+                  <children>
+                     <VBox alignment="CENTER" prefHeight="216.0" prefWidth="234.0" spacing="10.0">
+                        <children>
+                           <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" translateX="10.0">
+                              <image>
+                                 <Image url="@images/patientIcon1.png" />
+                              </image>
+                           </ImageView>
+                           <Label fx:id="l_nomlib" alignment="TOP_CENTER" prefHeight="17.0" prefWidth="265.0" text="PlaceHolder:Nom libr" />
+                        </children>
+                     </VBox>
+                  </children>
+               </Pane>
+               <VBox alignment="CENTER" fillWidth="false" prefHeight="367.0" prefWidth="280.0" spacing="50.0" VBox.vgrow="ALWAYS">
+                  <children>
+                     <Button fx:id="b_meds" alignment="TOP_LEFT" maxWidth="1000.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="285.0" text="Medications">
+                        <graphic>
+                           <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                              <image>
+                                 <Image url="@images/medsicon.png" />
+                              </image>
+                           </ImageView>
+                        </graphic>
+                        <padding>
+                           <Insets left="10.0" top="10.0" />
+                        </padding>
+                        <cursor>
+                           <Cursor fx:constant="HAND" />
+                        </cursor>
+                     </Button>
+                     <Button fx:id="b_cart" alignment="TOP_LEFT" layoutY="10.0" maxWidth="1000.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="285.0" text=" My Cart">
+                        <graphic>
+                           <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                              <image>
+                                 <Image url="@images/cart.png" />
+                              </image>
+                           </ImageView>
+                        </graphic>
+                        <padding>
+                           <Insets left="10.0" top="10.0" />
+                        </padding>
+                        <cursor>
+                           <Cursor fx:constant="HAND" />
+                        </cursor>
+                     </Button>
+                     <Button fx:id="b_logout" alignment="TOP_CENTER" layoutY="52.0" maxWidth="1000.0" minHeight="42.0" minWidth="0.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="171.0" text=" Log out" VBox.vgrow="ALWAYS">
+                        <graphic>
+                           <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                              <image>
+                                 <Image url="@images/logout.png" />
+                              </image>
+                           </ImageView>
+                        </graphic>
+                        <padding>
+                           <Insets left="7.0" top="7.0" />
+                        </padding>
+                        <cursor>
+                           <Cursor fx:constant="HAND" />
+                        </cursor>
+                     </Button>
+                  </children>
+               </VBox>
+            </children>
+         </VBox>
+      </children>
+   </AnchorPane>
+   <ImageView fx:id="menuopen" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="17.0">
+      <image>
+         <Image url="@images/Hamburger_icon.png" />
+      </image>
+      <cursor>
+         <Cursor fx:constant="HAND" />
+      </cursor>
+   </ImageView>
+   <ImageView fx:id="menuclose" fitHeight="35.0" fitWidth="35.0" layoutX="5.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true" visible="false" AnchorPane.topAnchor="17.0">
+      <image>
+         <Image url="@images/Hamburger_icon.png" />
+      </image>
+      <cursor>
+         <Cursor fx:constant="HAND" />
+      </cursor>
+   </ImageView>
 </AnchorPane>

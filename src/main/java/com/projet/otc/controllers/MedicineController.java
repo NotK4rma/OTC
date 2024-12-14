@@ -1,6 +1,7 @@
 package com.projet.otc.controllers;
 
 import com.projet.otc.DataManagement.MedicationDAO;
+import com.projet.otc.MiscTools.SceneMethod;
 import com.projet.otc.pharmacie.Medicament;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -18,10 +19,7 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -36,14 +34,26 @@ public class MedicineController implements Initializable {
     @FXML
     private Button b_search;
 
-    @FXML
-    private HBox header_meds;
+   /* @FXML
+    private HBox header_meds;*/
 
     @FXML
     private TextField searchField;
 
     @FXML
     private FlowPane container;
+
+    /*@FXML
+    private AnchorPane hide;
+
+    @FXML
+    private AnchorPane slider;
+
+    @FXML
+    private ImageView menuclose;
+
+    @FXML
+    private ImageView menuopen;*/
 
 
 
@@ -61,6 +71,9 @@ public class MedicineController implements Initializable {
         Platform.runLater(() -> {
             displayMedicines(container);
         });
+
+      /*  menuopen.setOnMouseClicked(e-> SceneMethod.translationOpen(slider,hide,menuopen,menuclose));
+        menuclose.setOnMouseClicked(e-> SceneMethod.translationClose(slider,hide,menuopen,menuclose));*/
 
 
 

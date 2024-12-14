@@ -48,11 +48,51 @@
 
 #header,#footer{
     -fx-border-color : #fffdf7;
-    -fx-border-width : 0px;
+    -fx-border-width : 5px;
     -fx-background-color : #43A047;
-    -fx-background-radius : 5px;
-    -fx-border-radius : 5px;
+   /* -fx-background-radius : 5px;
+    -fx-border-radius : 5px;*/
     -fx-padding : 10px;
+}
+
+#header{
+    -fx-border-color: gray transparent transparent transparent;
+
+}
+
+#footer{
+    -fx-border-color: transparent  transparent gray transparent;
+
+}
+
+
+#slider{
+
+    -fx-border-color : transparent black transparent transparent ;
+    -fx-border-width :2px ;
+    -fx-box-sizing: border-box;
+
+
+}
+
+
+#b_meds,#b_cart,#b_logout{
+        -fx-border-color : white transparent white transparent ;
+        -fx-border-size : 1px;
+        -fx-text-fill : #EDF2F7;
+        -fx-font-size : 18px;
+        -fx-font-family: Franklin Gothic Demi;
+        -fx-font-weight: 900;
+        -fx-border-radius: 0;
+        -fx-background-radius: 0;
+        -fx-font-size: 14px;
+
+}
+
+#b_logout{
+        -fx-border-radius: 5;
+        -fx-background-radius: 5;
+        -fx-border-color : white ;
 }
 
 
@@ -63,6 +103,9 @@
     -fx-border-width : 1px;
     -fx-padding:0px
     }
+
+
+
 
 
 
@@ -166,6 +209,11 @@
     -fx-border-width:1px;
     -fx-border-color: #4CAF50;
     -fx-border-style: solid;
+
+}
+
+#hide{
+    -fx-background-color : #686868cc;
 
 }
 

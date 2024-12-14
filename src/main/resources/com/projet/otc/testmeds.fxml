@@ -13,14 +13,14 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projet.otc.controllers.MedicineController">
+<AnchorPane prefHeight="947.0" prefWidth="1083.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projet.otc.controllers.MedicineController">
 
     <!-- Root Layout -->
     <children>
         <VBox spacing="10" style="-fx-background-color: #fffdf7;" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
 
             <!-- Header -->
-            <HBox fx:id="header_meds" alignment="CENTER" spacing="20" style="-fx-background-color: #43A047; -fx-padding: 20;">
+            <HBox fx:id="header" alignment="CENTER" spacing="20" style="-fx-background-color: #43A047; -fx-padding: 20;">
                 <Label style="-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold;" text=" Medications">
                <graphic>
                   <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
@@ -49,7 +49,7 @@
             <!-- Medicine Cards Container -->
             <ScrollPane fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" VBox.vgrow="ALWAYS">
                 <content>
-                    <FlowPane fx:id="container" alignment="CENTER" hgap="10.0" prefHeight="411.0" prefWidth="898.0" vgap="10.0">
+                    <FlowPane fx:id="container" alignment="CENTER" hgap="10.0" prefHeight="796.0" prefWidth="1081.0" vgap="10.0">
                   <padding>
                      <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
                   </padding></FlowPane>
