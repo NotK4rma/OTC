@@ -2,6 +2,7 @@ package com.projet.otc.MiscTools;
 
 import javafx.animation.*;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -11,6 +12,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
@@ -113,6 +115,8 @@ public class SceneMethod {
     }
 
 
+
+
     public static void SelectAnimation(Button b){
         ScaleTransition down = new ScaleTransition();
         down.setDuration(Duration.millis(300));
@@ -146,5 +150,29 @@ public class SceneMethod {
         b.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> hoverIn.play());
         b.addEventHandler(MouseEvent.MOUSE_EXITED, event -> hoverOut.play());
     }
+
+    /*public static void FadeStackAnimation(StackPane s, double start, double end){
+        FadeTransition fade = new FadeTransition();
+        fade.setNode(s);
+        fade.setFromValue(start);
+        fade.setToValue(end);
+        fade.setDuration(Duration.millis(200));
+
+    }  */
+
+    public static void FadeStackAnimation(Node s, double start, double end,int dur){
+        FadeTransition fade = new FadeTransition();
+        fade.setNode(s);
+        fade.setFromValue(start);
+        fade.setToValue(end);
+        fade.setDuration(Duration.millis(dur));
+        fade.play();
+
+    }
+
+
+
+
+
 
 }

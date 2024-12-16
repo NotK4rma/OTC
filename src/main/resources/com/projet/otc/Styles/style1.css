@@ -1,5 +1,9 @@
-.root {
+/*.root {
     -fx-background-color: #eef2f3;
+}*/
+
+.root {
+    -fx-background-color: linear-gradient(to bottom, #f9f9f9, #eaeff2);
 }
 
 
@@ -23,6 +27,12 @@
     -fx-font-weight: bold;
 }
 
+
+
+
+
+
+
 .button#b_up,#b_down{
     -fx-border-radius: 100px;
     -fx-background-radius: 100px;
@@ -31,6 +41,7 @@
     -fx-border-color : #43A047;
 
 }
+
 
 .button {
     -fx-background-color: #27ae60;
@@ -76,7 +87,7 @@
 }
 
 
-#b_meds,#b_cart,#b_logout{
+#b_meds,#b_cart,#b_logout,#b_phar{
         -fx-border-color : white transparent white transparent ;
         -fx-border-size : 1px;
         -fx-text-fill : #EDF2F7;
@@ -86,6 +97,7 @@
         -fx-border-radius: 0;
         -fx-background-radius: 0;
         -fx-font-size: 14px;
+        -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 3, 0, 0, 2);
 
 }
 
@@ -95,11 +107,73 @@
         -fx-border-color : white ;
 }
 
+#b_connect,#b_connect_2{
+    -fx-background-color: #28a745;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 8px 20px;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-cursor: hand;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-border-color : white ;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 3, 0, 0, 2);
+}
+
+#b_connect_2{
+    -fx-font-size: 18px;
+    -fx-border-width: 4px;
+    -fx-border-color: #28a745;
+
+}
+
+#noConnContainer,#medsContainer{
+    -fx-background-color: linear-gradient(to bottom, #e6f7e6, #ffffff);
+}
+
+
+#notconnectedInt,#connectedInt{
+        -fx-background-color: rgba(255, 255, 255, 0.1);
+        -fx-border-radius: 10px;
+        -fx-background-radius: 10px;
+        -fx-padding: 15px;
+        -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0, 0, 2);
+}
+
+#b_connect:hover{
+    -fx-background-color: #218838;
+}
+
+#b_connect_2:hover{
+    -fx-background-color: linear-gradient(to bottom, #e6f7e6, #E0FFE0);
+    -fx-border-color: #218838;
+    -fx-text-fill: #218838;
+
+
+}
+
+#l_notconn2,#l_notconn1,#l_notconn2_2,#l_notconn1_2{
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ffffff;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 2, 0, 0, 1);
+    -fx-text-alignment: center;
+}
+
+#l_notconn2_2,#l_notconn1_2{
+    -fx-font-size: 20px;
+    -fx-font-weight: 700;
+    -fx-text-fill: black;
+
+}
+
 
 .table-view {
     -fx-border-color: black transparent black transparent;
     -fx-background-color: transparent;
-    -fx-table-cell-border-color: rgba(128, 128, 128, 0.08);   /*Column divider*/
+    -fx-table-cell-border-color: rgba(128, 128, 128, 0.08);
     -fx-border-width : 1px;
     -fx-padding:0px
     }
@@ -124,7 +198,7 @@
 
 
 .table-row-cell {
-    -fx-border-color: transparent transparent #cccccc transparent; /* Row divider */
+    -fx-border-color: transparent transparent #cccccc transparent;
     -fx-background-color: #EDF2F7;
 }
 

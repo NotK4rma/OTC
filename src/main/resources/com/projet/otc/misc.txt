@@ -7,7 +7,40 @@ green feta7 and dead #b7db87
  #5f7c34
  #2c3e50
 
+#43A047
 
+
+
+
+    private VBox createMedicineCard(Medicament medicine) {
+        VBox card = new VBox(10);
+        card.setPadding(new Insets(10));
+        card.setPrefSize(150, 220);
+        card.setAlignment(Pos.TOP_CENTER);
+        card.setStyle("-fx-background-color: #fff; -fx-border-color: #27ae60; -fx-border-radius: 10px; -fx-background-radius: 10px;");
+
+        ImageView imageView = new ImageView(new Image(getClass().getResource(medicine.getImageUrl()).toExternalForm()));
+        System.out.println(medicine.getImageUrl());
+        imageView.setFitWidth(100);
+        imageView.setFitHeight(100);
+
+        Text nameText = new Text(medicine.getName());
+        nameText.setFont(Font.font("Arial", FontWeight.BOLD, 14));
+        nameText.setFill(Color.web("#2d3436"));
+
+        Text priceText = new Text("$" + String.format("%.2f", medicine.getPrice()));
+        priceText.setFont(Font.font("Arial", 12));
+        priceText.setFill(Color.web("#27ae60"));
+
+        card.getChildren().addAll(imageView, nameText, priceText);
+        card.setOnMouseEntered(e->hoverInAnimation(card));
+        card.setOnMouseExited(e->hoverOutAnimation(card));
+        addHoverShadowEffect(card);
+        card.setCursor(Cursor.HAND);
+        card.setOnMouseEntered(e->card.setStyle("-fx-border-width : 2px;-fx-background-color: #fff; -fx-border-color: #27ae60; -fx-border-radius: 10px; -fx-background-radius: 10px;"));
+        card.setOnMouseExited(e->card.setStyle("-fx-border-width : 1px;-fx-background-color: #fff; -fx-border-color: #27ae60; -fx-border-radius: 10px; -fx-background-radius: 10px;"));
+        return card;
+    }
 
 
 

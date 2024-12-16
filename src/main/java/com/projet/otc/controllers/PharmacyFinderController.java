@@ -19,6 +19,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -86,6 +87,12 @@ public class PharmacyFinderController {
     private Label rayonCirc;
 
     @FXML
+    private Label l_notconn1;
+
+    @FXML
+    private Label l_notconn2;
+
+    @FXML
     private AnchorPane hide;
 
     @FXML
@@ -101,10 +108,20 @@ public class PharmacyFinderController {
     private Button b_cart;
 
     @FXML
+    private Button b_connect;
+
+
+    @FXML
     private Button b_logout;
 
     @FXML
     private Button b_meds;
+
+    @FXML
+    private VBox connectedInt;
+
+    @FXML
+    private VBox notconnectedInt;
 
     private List<Pharmacie> lphar = new ArrayList<>();
 
@@ -121,6 +138,11 @@ public class PharmacyFinderController {
 
     @FXML
     public void initialize() {
+
+
+        l_notconn1.setWrapText(true);
+        l_notconn2.setWrapText(true);
+
 
         c_pharma.setCellValueFactory(data->
             new SimpleStringProperty(data.getValue().getName())
@@ -158,6 +180,13 @@ public class PharmacyFinderController {
         });
 
 
+        b_connect.setOnMouseEntered(e->{
+            SceneMethod.hoverInAnimation(b_connect);
+            SceneMethod.addHoverShadowEffect(b_connect);
+
+        });
+
+
         b_meds.setOnMouseEntered(e->{
             SceneMethod.hoverInAnimation(b_meds);
             SceneMethod.addHoverShadowEffect(b_meds);
@@ -167,6 +196,7 @@ public class PharmacyFinderController {
         b_logout.setOnMouseExited(e->SceneMethod.hoverOutAnimation(b_logout));
         b_meds.setOnMouseExited(e->SceneMethod.hoverOutAnimation(b_meds));
         b_cart.setOnMouseExited(e->SceneMethod.hoverOutAnimation(b_cart));
+        b_connect.setOnMouseExited(e->SceneMethod.hoverOutAnimation(b_connect));
 
         b_logout.setOnMouseClicked(e->{
             b_logout.setStyle("-fx-border-color : white white white white ; -fx-border-size : 1px; -fx-text-fill : #EDF2F7; -fx-font-size : 18px; -fx-font-family: Franklin Gothic Demi; -fx-font-weight: 900; -fx-border-radius: 0; -fx-background-radius: 0; -fx-background-color: #1B7A46; -fx-font-size: 14px;-fx-border-radius: 5; -fx-background-radius: 5; -fx-border-color : white ;");
@@ -177,6 +207,22 @@ public class PharmacyFinderController {
         b_cart.setOnMouseClicked(e->{
             b_cart.setStyle("-fx-border-color : white white white white ; -fx-border-size : 1px; -fx-text-fill : #EDF2F7; -fx-font-size : 18px; -fx-font-family: Franklin Gothic Demi; -fx-font-weight: 900; -fx-border-radius: 0; -fx-background-radius: 0; -fx-background-color: #1B7A46; -fx-font-size: 14px;");
             SceneMethod.SelectAnimation(b_cart);
+            try {
+                System.out.println(getClass().getResource("../Styles/style1.cssl"));
+                editor.switchScene((Stage)b_cart.getScene().getWindow(),"/com/projet/otc/testcart.fxml","/com/projet/otc/Styles/style1.css");
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+            try {
+                timeline.pause();
+            } catch (NullPointerException ex) {
+                Timeline StopInitTimeline = new Timeline(new KeyFrame(Duration.seconds(2),ev->{
+                    timeline.pause();
+                }));
+                StopInitTimeline.setCycleCount(1);
+                StopInitTimeline.play();
+                throw new RuntimeException(ex);
+            }
         });
 
 
@@ -189,8 +235,20 @@ public class PharmacyFinderController {
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
-            timeline.pause();
+            try {
+                timeline.pause();
+            } catch (NullPointerException ex) {
+                Timeline StopInitTimeline = new Timeline(new KeyFrame(Duration.seconds(2),ev->{
+                    timeline.pause();
+                }));
+                StopInitTimeline.setCycleCount(1);
+                StopInitTimeline.play();
+                throw new RuntimeException(ex);
+            }
+
         });
+
+
 
 
 
@@ -304,6 +362,9 @@ public class PharmacyFinderController {
 
 
 
+
+
+
     }
 
     private void loadMap() {
@@ -377,6 +438,10 @@ public class PharmacyFinderController {
                             let lon = e.latlng.lng;
                             addNewMarker(lat, lon); 
                             markerGroup.clearLayers();
+                            if(selectedPharmMarker){
+                                //addMarkerFromJava(selectedPharmMarker.getLatLng().lat, selectedPharmMarker.getLatLng().lng, name_lastPharm);
+                                selectedPharmMarker.remove();
+                            }
                         });
                         
                         function succes(pos){
