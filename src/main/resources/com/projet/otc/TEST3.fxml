@@ -12,6 +12,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.web.WebView?>
 
@@ -64,7 +65,7 @@
 
             <!-- Right Section: OpenStreetMap Integration -->
             <VBox spacing="10">
-            <HBox spacing="210.0">
+            <HBox>
                <children>
                       <Label fx:id="refresh" alignment="BOTTOM_LEFT" prefHeight="32.0" prefWidth="116.0" style="-fx-font-size: 14px; -fx-font-weight: bold;" text=" Map">
                      <HBox.margin>
@@ -84,6 +85,7 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </Label>
+                  <Region prefHeight="25.0" prefWidth="210.0" HBox.hgrow="ALWAYS" />
                   <Pane prefHeight="25.0" prefWidth="300.0">
                      <children>
                         <HBox prefHeight="25.0" prefWidth="300.0">

@@ -131,7 +131,10 @@
 
 #noConnContainer,#medsContainer{
     -fx-background-color: linear-gradient(to bottom, #e6f7e6, #ffffff);
+
 }
+
+
 
 
 #notconnectedInt,#connectedInt{

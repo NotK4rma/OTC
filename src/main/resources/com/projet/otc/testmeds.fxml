@@ -50,9 +50,9 @@
             <!-- Medicine Cards Container -->
             <ScrollPane fx:id="scrollContainer" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" VBox.vgrow="ALWAYS">
                 <content>
-                    <FlowPane fx:id="medsContainer" alignment="CENTER" hgap="10.0" prefHeight="841.0" prefWidth="1081.0" vgap="10.0">
+                    <FlowPane fx:id="medsContainer" alignment="TOP_CENTER" hgap="10.0" prefHeight="841.0" prefWidth="1081.0" vgap="10.0">
                   <padding>
-                     <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                     <Insets bottom="15.0" left="65.0" right="65.0" top="15.0" />
                   </padding></FlowPane>
                 </content>
             </ScrollPane>

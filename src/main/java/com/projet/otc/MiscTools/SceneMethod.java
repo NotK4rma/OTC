@@ -5,9 +5,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -27,6 +29,28 @@ public class SceneMethod {
         Scene scene= new Scene(root);
         scene.getStylesheets().add(getClass().getResource(css).toExternalForm());
         stage.setScene(scene);
+        stage.show();
+    }
+
+    public void PopSignIn() throws IOException{
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/projet/otc/login.fxml"));
+        Scene scene = new Scene(loader.load());
+        scene.getStylesheets().add(getClass().getResource("/com/projet/otc/Styles/signStyles.css").toExternalForm());
+        Stage stage = new Stage();
+        stage.setResizable(false);
+        stage.setScene(scene);
+        stage.getIcons().add(new Image(getClass().getResource("/com/projet/otc/images/icon.png").toExternalForm()));
+        stage.show();
+
+    }
+
+    public void PopMain() throws IOException{
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/projet/otc/TEST3.fxml"));
+        Scene scene = new Scene(loader.load());
+        scene.getStylesheets().add(getClass().getResource("/com/projet/otc/Styles/style1.css").toExternalForm());
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.getIcons().add(new Image(getClass().getResource("/com/projet/otc/images/icon.png").toExternalForm()));
         stage.show();
     }
 
@@ -168,6 +192,25 @@ public class SceneMethod {
         fade.setDuration(Duration.millis(dur));
         fade.play();
 
+    }
+
+
+    public static void alertErrorWindow(){
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText("Empty Text Fields!");
+        alert.setContentText("Please fill in all text fields available.");
+        Stage alertStage = (Stage)alert.getDialogPane().getScene().getWindow();
+        alertStage.getIcons().add(new Image("/com/projet/otc/images/icon.png"));
+        alert.showAndWait();
+    }
+
+
+    public static String capitalizeFirstLetter(String text) {
+        if (text == null || text.isEmpty()) {
+            return text;
+        }
+        return text.substring(0, 1).toUpperCase() + text.substring(1);
     }
 
 

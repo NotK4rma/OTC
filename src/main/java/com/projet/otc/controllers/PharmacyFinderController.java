@@ -123,6 +123,9 @@ public class PharmacyFinderController {
     @FXML
     private VBox notconnectedInt;
 
+    @FXML
+    private Label l_nomlib;
+
     private List<Pharmacie> lphar = new ArrayList<>();
 
     private int Radius=300000;
@@ -132,12 +135,32 @@ public class PharmacyFinderController {
     private boolean changed=false;
     private int durationForCheckPos=100;
     private SceneMethod editor = new SceneMethod();
+    private String NomcClient;
+
 
 
 
 
     @FXML
     public void initialize() {
+
+        NomcClient=LoginController.getNameClient();
+
+        if(NomcClient==null){
+            NomcClient=SignupController.getNameClient();
+        }
+
+        if(NomcClient==null){
+            notconnectedInt.setVisible(true);
+            connectedInt.setVisible(false);
+
+
+        }else{
+            notconnectedInt.setVisible(false);
+            connectedInt.setVisible(true);
+            l_nomlib.setText("Welcome, "+NomcClient+"!");
+
+        }
 
 
         l_notconn1.setWrapText(true);
@@ -358,6 +381,50 @@ public class PharmacyFinderController {
         });
 
         exitButton.setOnMouseClicked(e->System.exit(0));
+
+        b_connect.setOnMouseClicked(e-> {
+            try {
+
+                Stage CurrStage = (Stage)b_connect.getScene().getWindow();
+                editor.PopSignIn();
+                CurrStage.close();
+
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+            try {
+                timeline.pause();
+            } catch (NullPointerException ex) {
+                Timeline StopInitTimeline = new Timeline(new KeyFrame(Duration.seconds(2),ev->{
+                    timeline.pause();
+                }));
+                StopInitTimeline.setCycleCount(1);
+                StopInitTimeline.play();
+                throw new RuntimeException(ex);
+            }
+        });
+
+        b_logout.setOnMouseClicked(e-> {
+            try {
+                LoginController.revokeClientName();
+                SignupController.revokeClientName();
+                Stage CurrStage = (Stage)b_connect.getScene().getWindow();
+                editor.PopMain();
+                CurrStage.close();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+            try {
+                timeline.pause();
+            } catch (NullPointerException ex) {
+                Timeline StopInitTimeline = new Timeline(new KeyFrame(Duration.seconds(2),ev->{
+                    timeline.pause();
+                }));
+                StopInitTimeline.setCycleCount(1);
+                StopInitTimeline.play();
+                throw new RuntimeException(ex);
+            }
+        });
 
 
 

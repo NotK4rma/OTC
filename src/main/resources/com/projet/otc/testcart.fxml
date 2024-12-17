@@ -46,18 +46,18 @@
                   <Button fx:id="b_search" prefHeight="34.0" style="-fx-background-color: #27ae60; -fx-text-fill: white;" text="Search" />
                </children>
             </HBox>
-            <Pane VBox.vgrow="ALWAYS">
+            <AnchorPane VBox.vgrow="ALWAYS">
                <children>
-                  <ScrollPane fx:id="scrollContainer" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" visible="false">
+                  <ScrollPane fx:id="scrollContainer" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <content>
-                        <FlowPane fx:id="medsContainer" alignment="CENTER" hgap="10.0" prefHeight="841.0" prefWidth="1081.0" vgap="10.0">
+                        <FlowPane fx:id="medsContainer" alignment="TOP_CENTER" hgap="10.0" prefHeight="841.0" prefWidth="1081.0" vgap="10.0">
                            <padding>
                               <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
                            </padding>
                         </FlowPane>
                      </content>
                   </ScrollPane>
-                  <VBox fx:id="noConnContainer" alignment="CENTER" prefHeight="843.0" prefWidth="1083.0" spacing="20.0">
+                  <VBox fx:id="noConnContainer" alignment="CENTER" prefHeight="843.0" prefWidth="1083.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
                         <Label fx:id="l_notconn1_2" alignment="CENTER" prefWidth="234.0" text="You are not connected !" textAlignment="CENTER" />
                         <Button fx:id="b_connect_2" mnemonicParsing="false" prefHeight="42.0" prefWidth="171.0" text="Sign in" />
@@ -65,7 +65,7 @@
                      </children>
                   </VBox>
                </children>
-            </Pane>
+            </AnchorPane>
          </children>
       </VBox>
       <AnchorPane fx:id="hide" prefHeight="200.0" prefWidth="200.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="59.0" />

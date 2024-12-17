@@ -15,6 +15,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
@@ -35,18 +36,6 @@ import java.util.ResourceBundle;
 
 public class MedicineController implements Initializable {
     @FXML
-    private Button b_search;
-
-   /* @FXML
-    private HBox header_meds;*/
-
-    @FXML
-    private TextField searchField;
-
-    @FXML
-    private FlowPane medsContainer;
-
-    @FXML
     private Button b_cart;
 
     @FXML
@@ -58,10 +47,11 @@ public class MedicineController implements Initializable {
     @FXML
     private Button b_phar;
 
+    @FXML
+    private Button b_search;
 
     @FXML
     private VBox connectedInt;
-
 
     @FXML
     private HBox header;
@@ -79,6 +69,9 @@ public class MedicineController implements Initializable {
     private Label l_notconn2;
 
     @FXML
+    private FlowPane medsContainer;
+
+    @FXML
     private ImageView menuclose;
 
     @FXML
@@ -88,14 +81,41 @@ public class MedicineController implements Initializable {
     private VBox notconnectedInt;
 
     @FXML
+    private ScrollPane scrollContainer;
+
+    @FXML
+    private TextField searchField;
+
+    @FXML
     private AnchorPane slider;
 
     private final SceneMethod editor = new SceneMethod();
+    private String NomcClient;
+
 
 
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        NomcClient=LoginController.getNameClient();
+
+        if(NomcClient==null){
+            NomcClient=SignupController.getNameClient();
+        }
+
+        if(NomcClient==null){
+            notconnectedInt.setVisible(true);
+            connectedInt.setVisible(false);
+
+
+        }else{
+            notconnectedInt.setVisible(false);
+            connectedInt.setVisible(true);
+            l_nomlib.setText("Welcome, "+NomcClient+"!");
+
+        }
+
 
         l_notconn1.setWrapText(true);
         l_notconn2.setWrapText(true);
@@ -178,6 +198,33 @@ public class MedicineController implements Initializable {
             }
         });
 
+        scrollContainer.viewportBoundsProperty().addListener((obs, oldBounds, newBounds) -> {
+            medsContainer.setPrefHeight(newBounds.getHeight());
+        });
+
+        b_connect.setOnMouseClicked(e-> {
+            try {
+
+                Stage CurrStage = (Stage)b_connect.getScene().getWindow();
+                editor.PopSignIn();
+                CurrStage.close();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+
+        b_logout.setOnMouseClicked(e-> {
+            try {
+                LoginController.revokeClientName();
+                SignupController.revokeClientName();
+                Stage CurrStage = (Stage)b_connect.getScene().getWindow();
+                editor.PopMain();
+                CurrStage.close();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+
 
     }
 
@@ -232,7 +279,7 @@ public class MedicineController implements Initializable {
         nameText.setFont(Font.font("Arial", FontWeight.BOLD, 14));
         nameText.setFill(Color.web("#2d3436"));
 
-        Text priceText = new Text("$" + String.format("%.2f", medicine.getPrice()));
+        Text priceText = new Text( String.format("%.2f", medicine.getPrice())+"Dt");
         priceText.setFont(Font.font("Arial", 12));
         priceText.setFill(Color.web("#27ae60"));
 
@@ -298,7 +345,7 @@ public class MedicineController implements Initializable {
 
     }
 
-    private void hoverInAnimation(Pane p){
+    public static void hoverInAnimation(Pane p){
         ScaleTransition up = new ScaleTransition();
         up.setDuration(Duration.millis(300));
         up.setNode(p);
@@ -307,7 +354,7 @@ public class MedicineController implements Initializable {
         up.play();
 
     }
-    private void hoverOutAnimation(Pane p){
+    public static void hoverOutAnimation(Pane p){
         ScaleTransition down = new ScaleTransition();
         down.setDuration(Duration.millis(300));
         down.setNode(p);
