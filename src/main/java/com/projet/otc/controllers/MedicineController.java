@@ -13,10 +13,7 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -284,6 +281,7 @@ public class MedicineController implements Initializable {
         priceText.setFill(Color.web("#27ae60"));
 
         card.getChildren().addAll(bigStack, nameText, priceText);
+        card.setId(String.valueOf(medicine.getId()));
         card.setOnMouseEntered(e->hoverInAnimation(card));
         card.setOnMouseExited(e->hoverOutAnimation(card));
         addHoverShadowEffect(card);
@@ -309,9 +307,55 @@ public class MedicineController implements Initializable {
                 SceneMethod.FadeStackAnimation(background,0.33,0.13,200);
             });
 
-
-
         });
+
+        smallStack.setOnMouseClicked(e2->{
+            if (NomcClient!=null) {
+                int res = MedicationDAO.saveCommande(NomcClient,Integer.parseInt(card.getId()));
+                switch (res){
+                    case 0:
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Error");
+                        alert.setHeaderText("Couldn't add the medication to the cart");
+                        alert.setContentText("This Medication already exists in your cart!");
+                        Stage alertStage = (Stage)alert.getDialogPane().getScene().getWindow();
+                        alertStage.getIcons().add(new Image(getClass().getResource("/com/projet/otc/images/icon.png").toExternalForm()));
+                        alert.showAndWait();
+                        break;
+                    case -1:
+                        Alert alert2 = new Alert(Alert.AlertType.ERROR);
+                        alert2.setTitle("Error");
+                        alert2.setHeaderText("Couldn't add the medication to the cart");
+                        alert2.setContentText("An unknown Error has occured! Please try again!");
+                        Stage alertStage2 = (Stage)alert2.getDialogPane().getScene().getWindow();
+                        alertStage2.getIcons().add(new Image(getClass().getResource("/com/projet/otc/images/icon.png").toExternalForm()));
+                        alert2.showAndWait();
+                        break;
+                    case 1:
+                        Alert alert3 = new Alert(Alert.AlertType.INFORMATION);
+                        alert3.setTitle("Success");
+                        alert3.setHeaderText("Medication added to cart successfully ");
+                        alert3.setContentText("Check the Medication inside your cart!");
+                        Stage alertStage3 = (Stage)alert3.getDialogPane().getScene().getWindow();
+                        alertStage3.getIcons().add(new Image(getClass().getResource("/com/projet/otc/images/icon.png").toExternalForm()));
+                        alert3.showAndWait();
+                        break;
+                    default:
+                        break;
+                }
+            }
+            else{
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("You are not connected to an account!");
+                alert.setContentText("Please sign in or create an account to unlock all features and add medication to cart!");
+                Stage alertStage = (Stage)alert.getDialogPane().getScene().getWindow();
+                alertStage.getIcons().add(new Image(getClass().getResource("/com/projet/otc/images/icon.png").toExternalForm()));
+                alert.showAndWait();
+            }
+        });
+
+
 
 
         return card;

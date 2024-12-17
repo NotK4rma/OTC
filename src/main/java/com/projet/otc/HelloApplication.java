@@ -20,7 +20,7 @@ public class HelloApplication extends Application {
         scene.getStylesheets().add(getClass().getResource("Styles/style1.css").toExternalForm());
         primaryStage.setScene(scene);
         primaryStage.getIcons().add(new Image(getClass().getResource("/com/projet/otc/images/icon.png").toExternalForm()));
-        primaryStage.setTitle("Pharmacy Finder");
+        primaryStage.setTitle("QuickMeds");
         primaryStage.show();
 
     }

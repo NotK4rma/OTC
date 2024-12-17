@@ -39,6 +39,7 @@ public class SceneMethod {
         Stage stage = new Stage();
         stage.setResizable(false);
         stage.setScene(scene);
+        stage.setTitle("QuickMeds - Sign in");
         stage.getIcons().add(new Image(getClass().getResource("/com/projet/otc/images/icon.png").toExternalForm()));
         stage.show();
 
@@ -50,6 +51,7 @@ public class SceneMethod {
         scene.getStylesheets().add(getClass().getResource("/com/projet/otc/Styles/style1.css").toExternalForm());
         Stage stage = new Stage();
         stage.setScene(scene);
+        stage.setTitle("QuickMeds");
         stage.getIcons().add(new Image(getClass().getResource("/com/projet/otc/images/icon.png").toExternalForm()));
         stage.show();
     }

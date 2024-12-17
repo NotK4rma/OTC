@@ -23,6 +23,7 @@ public class MedicationDAO {
                         rs.getString("image")
                 );
                 med.setPrice(getAveragePriceMed(rs.getInt("id")));
+                med.setId(rs.getInt("id"));
                 Lmed.add(med);
             }
 
@@ -141,6 +142,52 @@ public class MedicationDAO {
         }
         System.out.println("database succes" + Lmed.size());
         return Lmed;
+
+
+    }
+
+    public static int saveCommande(String client , int med){
+        String query = "insert into commande(user,medicament) values(?,?)";
+        try(Connection conn = DataBaseConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(query)){
+            stmt.setString(1,client);
+            stmt.setInt(2,med);
+
+            if (CommandeExiste(client,med)!=1) {
+                return stmt.executeUpdate();
+            }
+            else{
+                return 0;
+            }
+
+        }catch (SQLException e){
+            e.printStackTrace();
+            return -1;
+        }
+
+
+    }
+
+    public static int CommandeExiste(String client , int med){
+        String query = "select count(*) as count from commande where user= ? and medicament = ?";
+        try(Connection conn = DataBaseConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(query)){
+            stmt.setString(1,client);
+            stmt.setInt(2,med);
+            try(ResultSet rs = stmt.executeQuery()){
+                if(rs.next()){
+                    return rs.getInt("count");
+                }
+
+                return 0;
+            }
+
+
+
+        }catch (SQLException e){
+            e.printStackTrace();
+            return -1;
+        }
 
 
     }
