@@ -197,13 +197,13 @@ public class SceneMethod {
     }
 
 
-    public static void alertErrorWindow(){
+    public void alertErrorWindow(){
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
         alert.setHeaderText("Empty Text Fields!");
         alert.setContentText("Please fill in all text fields available.");
         Stage alertStage = (Stage)alert.getDialogPane().getScene().getWindow();
-        alertStage.getIcons().add(new Image("/com/projet/otc/images/icon.png"));
+        alertStage.getIcons().add(new Image(getClass().getResource("/com/projet/otc/images/icon.png").toExternalForm()));
         alert.showAndWait();
     }
 

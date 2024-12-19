@@ -59,6 +59,32 @@ public class SignupController implements Initializable {
             }
         });
 
+        usernameField.setOnAction(e-> {
+            try {
+                signUp();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+
+        passwordField.setOnAction(e-> {
+            try {
+                signUp();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+
+
+        confirmPasswordfield.setOnAction(e-> {
+            try {
+                signUp();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+
+
 
     }
 
@@ -67,7 +93,7 @@ public class SignupController implements Initializable {
         String pw = passwordField.getText();
         String c_pw = confirmPasswordfield.getText();
         if (un.isBlank() || pw.isBlank() || c_pw.isBlank()) {
-            SceneMethod.alertErrorWindow();
+            editor.alertErrorWindow();
         } else {
             if (pw.equals(c_pw)) {
                 int res = ClientDAO.saveClient(un, pw);

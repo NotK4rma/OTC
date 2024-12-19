@@ -2,6 +2,7 @@ package com.projet.otc.DataManagement;
 
 import com.projet.otc.pharmacie.Medicament;
 import com.projet.otc.pharmacie.Pharmacie;
+import com.projet.otc.pharmacie.Stock;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -24,6 +25,7 @@ public class MedicationDAO {
                 );
                 med.setPrice(getAveragePriceMed(rs.getInt("id")));
                 med.setId(rs.getInt("id"));
+                med.setDesc(rs.getString("description"));
                 Lmed.add(med);
             }
 
@@ -131,6 +133,7 @@ public class MedicationDAO {
                             rs.getString("image")
                     );
                     med.setPrice(getAveragePriceMed(rs.getInt("id")));
+                    med.setId(rs.getInt("medications.id"));
                     Lmed.add(med);
                 }
             }
@@ -186,6 +189,56 @@ public class MedicationDAO {
 
         }catch (SQLException e){
             e.printStackTrace();
+            return -1;
+        }
+
+
+    }
+
+    public static List<Stock> getInfoMedicine(int idmed){
+        String query = "select * from stock inner join pharmacies on pharmacy_id=pharmacies.id inner join medications on medication_id = medications.id where medication_id = ?";
+        List<Stock> Lstock = new ArrayList<>();
+        try(Connection conn= DataBaseConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(query)){
+            stmt.setInt(1,idmed);
+            try(ResultSet rs = stmt.executeQuery()){
+                while(rs.next()){
+                    Stock stk = new Stock(
+                            rs.getDouble("price"),
+                            rs.getInt("quantity"),
+                            rs.getString("pharmacies.name")
+                            );
+
+                    Lstock.add(stk);
+                }
+
+            }
+
+
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+
+        return Lstock;
+
+    }
+
+    public static int deleteCommande(String client , int med){
+        String query = "delete from commande where user = ? and medicament = ?";
+        try(Connection conn = DataBaseConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(query)){
+            stmt.setString(1,client);
+            stmt.setInt(2,med);
+            System.out.println("Client: " + client + ", Med: " + med);
+
+            int test =  stmt.executeUpdate();
+            System.out.println(test);
+            return test;
+
+        }catch (SQLException e){
+            e.printStackTrace();
+            System.out.println("erroreeeeeeeeeeeeeeeeeeeeeeee");
             return -1;
         }
 

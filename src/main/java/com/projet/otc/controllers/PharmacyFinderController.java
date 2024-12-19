@@ -242,7 +242,7 @@ public class PharmacyFinderController {
                 Timeline StopInitTimeline = new Timeline(new KeyFrame(Duration.seconds(2),ev->{
                     timeline.pause();
                 }));
-                StopInitTimeline.setCycleCount(1);
+                StopInitTimeline.setCycleCount(3);
                 StopInitTimeline.play();
                 throw new RuntimeException(ex);
             }
@@ -264,7 +264,7 @@ public class PharmacyFinderController {
                 Timeline StopInitTimeline = new Timeline(new KeyFrame(Duration.seconds(2),ev->{
                     timeline.pause();
                 }));
-                StopInitTimeline.setCycleCount(1);
+                StopInitTimeline.setCycleCount(3);
                 StopInitTimeline.play();
                 throw new RuntimeException(ex);
             }
@@ -398,7 +398,7 @@ public class PharmacyFinderController {
                 Timeline StopInitTimeline = new Timeline(new KeyFrame(Duration.seconds(2),ev->{
                     timeline.pause();
                 }));
-                StopInitTimeline.setCycleCount(1);
+                StopInitTimeline.setCycleCount(3);
                 StopInitTimeline.play();
                 throw new RuntimeException(ex);
             }
@@ -420,7 +420,7 @@ public class PharmacyFinderController {
                 Timeline StopInitTimeline = new Timeline(new KeyFrame(Duration.seconds(2),ev->{
                     timeline.pause();
                 }));
-                StopInitTimeline.setCycleCount(1);
+                StopInitTimeline.setCycleCount(3);
                 StopInitTimeline.play();
                 throw new RuntimeException(ex);
             }

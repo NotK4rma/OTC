@@ -89,6 +89,8 @@ public class MedicineController implements Initializable {
     private final SceneMethod editor = new SceneMethod();
     private String NomcClient;
 
+    private static Medicament med =null;
+
 
 
 
@@ -227,6 +229,8 @@ public class MedicineController implements Initializable {
 
 
     private VBox createMedicineCard(Medicament medicine) {
+
+
         VBox card = new VBox(10);
         card.setPadding(new Insets(10));
         card.setPrefSize(150, 220);
@@ -309,7 +313,8 @@ public class MedicineController implements Initializable {
 
         });
 
-        smallStack.setOnMouseClicked(e2->{
+        smallStack.setOnMouseClicked(e->{
+            e.consume();
             if (NomcClient!=null) {
                 int res = MedicationDAO.saveCommande(NomcClient,Integer.parseInt(card.getId()));
                 switch (res){
@@ -352,6 +357,15 @@ public class MedicineController implements Initializable {
                 Stage alertStage = (Stage)alert.getDialogPane().getScene().getWindow();
                 alertStage.getIcons().add(new Image(getClass().getResource("/com/projet/otc/images/icon.png").toExternalForm()));
                 alert.showAndWait();
+            }
+        });
+
+        card.setOnMouseClicked(e->{
+            try {
+                med = medicine;
+                editor.switchScene((Stage)b_logout.getScene().getWindow(),"/com/projet/otc/medsInfo.fxml","/com/projet/otc/Styles/style1.css");
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
             }
         });
 
@@ -435,6 +449,10 @@ public class MedicineController implements Initializable {
         // Add event listeners for hover effects
         pane.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> hoverIn.play());
         pane.addEventHandler(MouseEvent.MOUSE_EXITED, event -> hoverOut.play());
+    }
+
+    public static Medicament getMedication(){
+        return med;
     }
 
 

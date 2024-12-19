@@ -75,6 +75,25 @@ public class LoginController implements Initializable {
         });
 
 
+        usernameField.setOnAction(e-> {
+            try {
+                logIn();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+
+        passwordField.setOnAction(e-> {
+            try {
+                logIn();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+
+
+
+
 
 
 
@@ -85,7 +104,7 @@ public class LoginController implements Initializable {
         String un = usernameField.getText().trim();
         String pw = passwordField.getText();
         if(un.isBlank() || pw.isBlank() ){
-            SceneMethod.alertErrorWindow();
+            editor.alertErrorWindow();
         }
         else {
             boolean res = ClientDAO.getClient(un,pw);

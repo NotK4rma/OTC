@@ -6,6 +6,7 @@ public class Stock {
     private String MedDesc;
     private Double prixMed;
     private int qte;
+    private String nomPharma;
 
 
     public Stock(int id, String medName, String medDesc, Double prixMed, int qte) {
@@ -21,6 +22,12 @@ public class Stock {
         MedDesc = medDesc;
         this.prixMed = prixMed;
         this.qte = qte;
+    }
+
+    public Stock( Double prixMed, int qte,String nomPharma) {
+        this.prixMed = prixMed;
+        this.qte = qte;
+        this.nomPharma=nomPharma;
     }
 
     public int getId() {
@@ -61,5 +68,13 @@ public class Stock {
 
     public void setQte(int qte) {
         this.qte = qte;
+    }
+
+    public String getNomPharma() {
+        return nomPharma;
+    }
+
+    public void setNomPharma(String nomPharma) {
+        this.nomPharma = nomPharma;
     }
 }

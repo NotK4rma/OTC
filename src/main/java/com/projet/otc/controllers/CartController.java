@@ -10,10 +10,7 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -277,6 +274,40 @@ public class CartController implements Initializable {
         imageView.setFitWidth(100);
         imageView.setFitHeight(100);
 
+        StackPane smallStack= new StackPane();
+        smallStack.setPrefHeight(20);
+        smallStack.setPrefWidth(20);
+        smallStack.setMaxWidth(20);
+        smallStack.setMaxHeight(20);
+        smallStack.setStyle("-fx-border-radius: 5px;-fx-background-radius: 5px;");
+
+        ImageView plus = new ImageView(new Image(getClass().getResource("/com/projet/otc/images/minus.png").toExternalForm()));
+        plus.setFitHeight(10);
+        plus.setFitWidth(10);
+        plus.setOpacity(0.2);
+
+        Pane background = new Pane();
+        background.setPrefHeight(10);
+        background.setPrefWidth(10);
+        background.setStyle("-fx-background-color : #961c26");
+        background.setOpacity(0.13);
+
+        smallStack.getChildren().addAll(background,plus);
+
+        smallStack.setOpacity(0);
+
+
+        StackPane bigStack = new StackPane();
+        bigStack.setPrefWidth(100);
+        bigStack.setPrefHeight(100);
+        bigStack.getChildren().addAll(imageView,smallStack);
+        smallStack.setTranslateX(48);
+        smallStack.setTranslateY(40);
+
+        bigStack.setStyle("-fx-border-width : 1px;-fx-border-color: black;-fx-border-style : solid;-fx-border-radius: 5px; -fx-padding: 5px 0 5px 0; -fx-margin : 5px 0 0 0;");
+
+
+
         Text nameText = new Text(medicine.getName());
         nameText.setFont(Font.font("Arial", FontWeight.BOLD, 14));
         nameText.setFill(Color.web("#2d3436"));
@@ -285,21 +316,59 @@ public class CartController implements Initializable {
         priceText.setFont(Font.font("Arial", 12));
         priceText.setFill(Color.web("#27ae60"));
 
-
-        StackPane bigStack = new StackPane();
-        bigStack.setPrefWidth(100);
-        bigStack.setPrefHeight(100);
-        bigStack.getChildren().addAll(imageView);
-        bigStack.setStyle("-fx-border-width : 1px;-fx-border-color: black;-fx-border-style : solid;-fx-border-radius: 5px; -fx-padding: 5px 0 5px 0; -fx-margin : 5px 0 0 0;");
-
-
         card.getChildren().addAll(bigStack, nameText, priceText);
+        card.setId(String.valueOf(medicine.getId()));
         card.setOnMouseEntered(e->MedicineController.hoverInAnimation(card));
         card.setOnMouseExited(e->MedicineController.hoverOutAnimation(card));
         MedicineController.addHoverShadowEffect(card);
         card.setCursor(Cursor.HAND);
-        card.setOnMouseEntered(e->card.setStyle("-fx-border-width : 2px;-fx-background-color: #fff; -fx-border-color: #27ae60; -fx-border-radius: 10px; -fx-background-radius: 10px;"));
-        card.setOnMouseExited(e->card.setStyle("-fx-border-width : 1px;-fx-background-color: #fff; -fx-border-color: #27ae60; -fx-border-radius: 10px; -fx-background-radius: 10px;"));
+        card.setOnMouseEntered(e->{
+
+            card.setStyle("-fx-border-width : 2px;-fx-background-color: #fff; -fx-border-color: #27ae60; -fx-border-radius: 10px; -fx-background-radius: 10px;");
+            smallStack.setVisible(true);
+            SceneMethod.FadeStackAnimation(smallStack,0,1,300);
+            smallStack.setOnMouseEntered(e2->{
+                SceneMethod.FadeStackAnimation(plus,0.2,0.4,200);
+                SceneMethod.FadeStackAnimation(background,0.13,0.43,200);
+            });
+        });
+
+
+        card.setOnMouseExited(e->{
+
+            card.setStyle("-fx-border-width : 1px;-fx-background-color: #fff; -fx-border-color: #27ae60; -fx-border-radius: 10px; -fx-background-radius: 10px;");
+            SceneMethod.FadeStackAnimation(smallStack,1,0,300);
+            smallStack.setOnMouseExited(e2->{
+                SceneMethod.FadeStackAnimation(plus,0.4,0.2,200);
+                SceneMethod.FadeStackAnimation(background,0.43,0.13,200);
+            });
+
+        });
+
+        smallStack.setOnMouseClicked(e->{
+            int res = MedicationDAO.deleteCommande(NomcClient,medicine.getId());
+
+            if(res==1){
+                Alert alert3 = new Alert(Alert.AlertType.INFORMATION);
+                alert3.setTitle("Success");
+                alert3.setHeaderText("Medication Removed successfully ");
+                alert3.setContentText("The medication has been successfully removed from your cart!");
+                Stage alertStage3 = (Stage)alert3.getDialogPane().getScene().getWindow();
+                alertStage3.getIcons().add(new Image(getClass().getResource("/com/projet/otc/images/icon.png").toExternalForm()));
+                alert3.showAndWait();
+                displayMedicines(medsContainer);
+            }
+            else{
+                Alert alert2 = new Alert(Alert.AlertType.ERROR);
+                alert2.setTitle("Error");
+                alert2.setHeaderText("Couldn't remove the medication from the cart");
+                alert2.setContentText("An unknown Error has occured! Please try again!");
+                Stage alertStage2 = (Stage)alert2.getDialogPane().getScene().getWindow();
+                alertStage2.getIcons().add(new Image(getClass().getResource("/com/projet/otc/images/icon.png").toExternalForm()));
+                alert2.showAndWait();
+            }
+        });
+
         return card;
     }
 

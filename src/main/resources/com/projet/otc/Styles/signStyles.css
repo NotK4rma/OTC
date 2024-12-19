@@ -10,6 +10,12 @@
 
 }
 
+.root,#backgroundcolor{
+    -fx-background-color: linear-gradient(to bottom, #e6f7e6, #bdecb6);
+    -fx-padding :  10;
+
+}
+
 #bg2{
     -fx-background-radius : 15px;
     -fx-border-radius : 15px;
