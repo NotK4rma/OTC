@@ -62,8 +62,6 @@ public class PharmacyFinderController {
     @FXML
     private Button refreshButton;
 
-    @FXML
-    private Button exitButton;
 
     @FXML
     private Button b_table;
@@ -153,12 +151,15 @@ public class PharmacyFinderController {
         if(NomcClient==null){
             notconnectedInt.setVisible(true);
             connectedInt.setVisible(false);
+            b_logout.setVisible(false);
 
 
         }else{
             notconnectedInt.setVisible(false);
             connectedInt.setVisible(true);
             l_nomlib.setText("Welcome, "+NomcClient+"!");
+            b_logout.setVisible(true);
+
 
         }
 
@@ -343,16 +344,27 @@ public class PharmacyFinderController {
 
             rayonCirc.setText(String.valueOf(Radius));
 
-            refresh.setOnMouseClicked(e->{
-                System.out.println("hhhh");
-                loadMapAndExecuteChainedTasks();
-                Radius=Radius_init;
-                rayonCirc.setText(String.valueOf(Radius));
-                tPharma.getItems().clear();
-                tMedic.getItems().clear();
+//            refresh.setOnMouseClicked(e->{
+//                System.out.println("hhhh");
+//                loadMapAndExecuteChainedTasks();
+//                Radius=Radius_init;
+//                rayonCirc.setText(String.valueOf(Radius));
+//                tPharma.getItems().clear();
+//                tMedic.getItems().clear();
+//
+//            });
 
-            });
 
+        });
+
+
+        refresh.setOnMouseClicked(e->{
+            System.out.println("hhhh");
+            loadMapAndExecuteChainedTasks();
+            Radius=Radius_init;
+            rayonCirc.setText(String.valueOf(Radius));
+            tPharma.getItems().clear();
+            tMedic.getItems().clear();
 
         });
 
@@ -380,7 +392,7 @@ public class PharmacyFinderController {
             }
         });
 
-        exitButton.setOnMouseClicked(e->System.exit(0));
+
 
         b_connect.setOnMouseClicked(e-> {
             try {
@@ -594,7 +606,10 @@ public class PharmacyFinderController {
                         }
                         
                         function changeRadius(newRay){
-                            rayon=newRay;
+                            if(newRay<0){
+                                rayon=0;
+                            }else{
+                            rayon=newRay;}
                             circle.setRadius(rayon);
                             markerGroup.clearLayers();
                             if(selectedPharmMarker){

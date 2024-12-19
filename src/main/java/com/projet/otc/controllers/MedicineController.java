@@ -106,12 +106,16 @@ public class MedicineController implements Initializable {
         if(NomcClient==null){
             notconnectedInt.setVisible(true);
             connectedInt.setVisible(false);
+            b_logout.setVisible(false);
+
 
 
         }else{
             notconnectedInt.setVisible(false);
             connectedInt.setVisible(true);
             l_nomlib.setText("Welcome, "+NomcClient+"!");
+            b_logout.setVisible(true);
+
 
         }
 

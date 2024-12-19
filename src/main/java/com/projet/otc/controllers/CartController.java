@@ -110,12 +110,16 @@ public class CartController implements Initializable {
             connectedInt.setVisible(false);
             scrollContainer.setVisible(false);
             noConnContainer.setVisible(true);
+            b_logout.setVisible(false);
+
         }else{
             notconnectedInt.setVisible(false);
             connectedInt.setVisible(true);
             scrollContainer.setVisible(true);
             noConnContainer.setVisible(false);
             l_nomlib.setText("Welcome, "+NomcClient+"!");
+            b_logout.setVisible(true);
+
 
         }
 

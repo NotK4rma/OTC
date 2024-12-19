@@ -132,12 +132,7 @@
         </SplitPane>
 
         <!-- Footer -->
-        <HBox fx:id="footer" alignment="CENTER" spacing="10" style="-fx-background-color: green;">
-            <Button fx:id="exitButton" style="-fx-background-color: #e74c3c; -fx-text-fill: white;" text="Exit" HBox.hgrow="NEVER">
-                <cursor>
-                    <Cursor fx:constant="HAND" />
-                </cursor></Button>
-        </HBox>
+        <HBox fx:id="footer" alignment="CENTER" spacing="10" style="-fx-background-color: green;" />
     </VBox>
    <AnchorPane fx:id="hide" prefHeight="200.0" prefWidth="200.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="59.0" />
    <AnchorPane fx:id="slider" prefHeight="200.0" prefWidth="280.0" style="-fx-background-color: #006766;" translateX="-282.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="59.0">
