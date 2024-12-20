@@ -9,10 +9,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -103,10 +100,27 @@ public class MedsInfoController implements Initializable {
         });
 
 
+        /*t_meds.setRowFactory(tv -> new TableRow<Stock>() {
+            @Override
+            protected void updateItem(Stock item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setVisible(false);
+                    setPrefHeight(0);
+                } else {
+                    setVisible(true);
+                    setPrefHeight(25); // Custom height for the row
+                }
+            }
+        });*/
+
+
+
         if(med!=null){
             fillAvailableTable(med.getId());
             picmed.setImage(new Image(getClass().getResource(med.getImageUrl()).toExternalForm()));
             l_desc.setText(med.getDesc());
+            System.out.println(med.getDesc());
             l_nom.setText(med.getName());
 
         }

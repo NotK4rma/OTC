@@ -352,7 +352,7 @@ public class CartController implements Initializable {
         smallStack.setOnMouseClicked(e->{
             int res = MedicationDAO.deleteCommande(NomcClient,medicine.getId());
 
-            if(res==1){
+            if(res>=1){
                 Alert alert3 = new Alert(Alert.AlertType.INFORMATION);
                 alert3.setTitle("Success");
                 alert3.setHeaderText("Medication Removed successfully ");

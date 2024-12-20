@@ -225,6 +225,11 @@
     -fx-background-color: #E0E0E0; /* slightly dark Light gray */
 }
 
+.table-row-cell:empty {
+    -fx-opacity: 0;
+    -fx-max-height: 0;
+}
+
 /************************************************************************/
 
 .scroll-bar {

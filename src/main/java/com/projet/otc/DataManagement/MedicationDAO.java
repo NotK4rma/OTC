@@ -77,6 +77,7 @@ public class MedicationDAO {
                     );
                     med.setPrice(getAveragePriceMed(rs.getInt("id")));
                     med.setId(rs.getInt("id"));
+                    med.setDesc(rs.getString("description"));
                     Lmed.add(med);
                 }
             }
@@ -102,9 +103,11 @@ public class MedicationDAO {
             try(ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     Medicament med = new Medicament(rs.getString("name"),
+                            rs.getString("medications.description"),
                             rs.getString("image")
                     );
                     med.setPrice(getAveragePriceMed(rs.getInt("id")));
+                    med.setDesc(rs.getString("description"));
                     Lmed.add(med);
                 }
             }
